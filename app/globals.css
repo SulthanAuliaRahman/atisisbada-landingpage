@@ -1,26 +1,75 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Core */
+    --background: 210 40% 98%;   /* light blue-gray */
+    --foreground: 222 47% 11%;   /* deep navy text */
+
+    /* Brand */
+    --primary: 220 90% 56%;      /* BLUE */
+    --secondary: 200 85% 45%;    /* cyan-blue accent */
+
+    /* Interactive */
+    --button: var(--primary);
+    --button-foreground: 210 40% 98%;
+ 
+  }
+
+  .dark {
+    --background: 222 47% 6%;    /* deep blue-black */
+    --foreground: 213 31% 91%;   /* soft blue-white */
+
+    --primary: 220 90% 65%;      /* brighter blue */
+    --secondary: 200 85% 60%;
+
+    --button: var(--primary);
+    --button-foreground: 222 47% 6%;
+  }
+
+  body {
+    @apply bg-background text-foreground transition-colors duration-1000;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-secondary: hsl(var(--secondary));
+
+  --color-button: hsl(var(--button));
+  --color-button-foreground: hsl(var(--button-foreground));
 }
+
+
+@utility container{
+  margin-inline: auto;
+  padding-inline: 2rem;
+  
+  /* adaptive screensize for responsife web */
+  @media (width >= 640px) {
+    max-width: 640px;
+  }
+  @media (width >= 768px) {
+    max-width: 768px;
+  }
+  @media (width >= 1024px) {
+    max-width: 1024px;
+  }
+  @media (width >= 1280px) {
+    max-width: 1280px;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
+}
+@utility regular-button {
+  @apply px-6 py-2 rounded-full
+         bg-button text-button-foreground
+         font-medium transition-all
+         hover:scale-105 active:scale-95;
+}
+
