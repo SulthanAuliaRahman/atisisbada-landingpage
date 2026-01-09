@@ -5,10 +5,11 @@ import DesktopNav from "./DesktopNavbar";
 import MobileNav from "./MobileNavbar";
 
 const navItems = [
-  { name: "Profil", href: "/profil" },
-  { name: "Fitur", href: "/fitur" },
-  { name: "Modul", href: "/modul" },
-  { name: "Mitra", href: "mitra" },
+  { name: "Home" ,      href: "/"},
+  { name: "Profil",     href: "/profil" },
+  { name: "Fitur",      href: "/fitur" },
+  { name: "Modul",      href: "/modul" },
+  { name: "Mitra",      href: "/mitra" },
   { name: "Portofolio", href: "/portofolio" },
 ];
 

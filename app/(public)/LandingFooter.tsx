@@ -1,6 +1,6 @@
 import React from 'react'
 
-const LandingFooterSection = () => {
+const LandingFooter= () => {
   return (
     <section className="py-24 bg-background">
       <div className="container">
@@ -12,4 +12,4 @@ const LandingFooterSection = () => {
   )
 }
 
-export default LandingFooterSection
+export default LandingFooter

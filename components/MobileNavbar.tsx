@@ -1,4 +1,5 @@
 import { Menu, X } from "lucide-react";
+import Link from "next/link";
 
 type NavItem = {
   name: string;
@@ -37,14 +38,14 @@ const MobileNav = ({
       >
         <div className="flex flex-col items-center gap-8 text-xl">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.name}
               href={item.href}
               className="text-foreground/80 hover:text-primary transition-colors"
               onClick={onToggle}
             >
               {item.name}
-            </a>
+            </Link>
           ))}
 
           <button
