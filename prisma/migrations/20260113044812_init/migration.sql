@@ -56,6 +56,82 @@ CREATE TABLE "verification" (
     CONSTRAINT "verification_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "home_carousel" (
+    "id" CHAR(36) NOT NULL,
+    "nomor_urut" INTEGER,
+    "url" VARCHAR(255) NOT NULL,
+    "status" BOOLEAN NOT NULL,
+    "created_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3),
+
+    CONSTRAINT "home_carousel_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "data_kantor" (
+    "id" CHAR(36) NOT NULL,
+    "nama_kantor" VARCHAR(255) NOT NULL,
+    "deskripsi_kantor" VARCHAR(255) NOT NULL,
+    "alamat_kantor" VARCHAR(255) NOT NULL,
+    "nomor_kantor" VARCHAR(255) NOT NULL,
+    "email_kantor" VARCHAR(255) NOT NULL,
+    "url_instagram_kantor" VARCHAR(255) NOT NULL,
+    "longitude" VARCHAR(255) NOT NULL,
+    "latitude" VARCHAR(255) NOT NULL,
+    "created_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3),
+
+    CONSTRAINT "data_kantor_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "faq" (
+    "id" CHAR(36) NOT NULL,
+    "pertanyaan" VARCHAR(255) NOT NULL,
+    "jawaban" VARCHAR(255) NOT NULL,
+    "created_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3),
+
+    CONSTRAINT "faq_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "publikasi" (
+    "id" CHAR(36) NOT NULL,
+    "Judul" VARCHAR(255) NOT NULL,
+    "Deskripsi" VARCHAR(255) NOT NULL,
+    "url" VARCHAR(255) NOT NULL,
+    "created_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3),
+
+    CONSTRAINT "publikasi_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "mitra" (
+    "id" CHAR(36) NOT NULL,
+    "nama" VARCHAR(255) NOT NULL,
+    "jawaban" VARCHAR(255) NOT NULL,
+    "created_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3),
+
+    CONSTRAINT "mitra_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "berita" (
+    "id" CHAR(36) NOT NULL,
+    "nomor_urut" INTEGER,
+    "nama" VARCHAR(255) NOT NULL,
+    "deskripsi" VARCHAR(255) NOT NULL,
+    "url" VARCHAR(255) NOT NULL,
+    "created_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3),
+
+    CONSTRAINT "berita_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 

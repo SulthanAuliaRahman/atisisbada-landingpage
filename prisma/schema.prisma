@@ -75,3 +75,69 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+model HomeCarousel {
+id String @id @db.Char(36)
+nomor_urut Int?
+url String @db.VarChar(255)
+status Boolean
+created_at DateTime?
+updated_at DateTime?
+
+@@map("home_carousel")
+}
+
+model DataKantor {
+id String @id @db.Char(36)
+nama_kantor String @db.VarChar(255)
+deskripsi_kantor String @db.VarChar(255)
+alamat_kantor String @db.VarChar(255)
+nomor_kantor String @db.VarChar(255)
+email_kantor String @db.VarChar(255)
+url_instagram_kantor String @db.VarChar(255)
+longitude String @db.VarChar(255)
+latitude String @db.VarChar(255)
+created_at DateTime?
+updated_at DateTime?
+
+@@map("data_kantor")
+}
+
+model Faq {
+id String @id @db.Char(36)
+pertanyaan String @db.VarChar(255)
+jawaban String @db.VarChar(255)
+created_at DateTime?
+updated_at DateTime?
+
+@@map("faq")
+}
+
+model Publikasi {
+id String @id @db.Char(36)
+Judul String @db.VarChar(255)
+Deskripsi String @db.VarChar(255)
+url String @db.VarChar(255)
+created_at DateTime?
+updated_at DateTime?
+@@map("publikasi")
+}
+
+model Mitra {
+id String @id @db.Char(36)
+nama String @db.VarChar(255)
+jawaban String @db.VarChar(255)
+created_at DateTime?
+updated_at DateTime?
+@@map("mitra")
+}
+
+model Berita {
+id String @id @db.Char(36)
+nomor_urut Int?
+nama String @db.VarChar(255)
+deskripsi String @db.VarChar(255)
+url String @db.VarChar(255)
+created_at DateTime?
+updated_at DateTime?
+@@map("berita")
+}
