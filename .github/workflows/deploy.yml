@@ -13,17 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Next.js
-        run: npm run build
-
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
@@ -36,4 +25,11 @@ jobs:
 
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.APP_DIR }} && git pull origin main && npm ci && npm run build && pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+            cd ${{ secrets.APP_DIR }} &&
+            git pull origin main &&
+            npm install &&
+            npx prisma generate &&
+            npm run build &&
+            pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
+          "
