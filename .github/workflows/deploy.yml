@@ -28,11 +28,4 @@ jobs:
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy to server
-        run: |
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd ${{ secrets.APP_DIR }}
-            git pull origin main
-            npm install
-            npm run build
-            pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
-          EOF
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.APP_DIR }} && git pull origin main && npm install && npm run build && pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js"
