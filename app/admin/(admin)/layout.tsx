@@ -7,17 +7,11 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
     <AdminGuard>
       <div className="flex min-h-screen">
-        <AdminSidebar/>
-        <main>
-          <div className="container flex justify-center">
-              {children}
-          </div>
-        </main>
+        <AdminSidebar />
+        <main className="flex-1 overflow-auto">{children}</main>
       </div>
     </AdminGuard>
-    </>
   );
 }

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 @layer base {
   :root {
@@ -13,7 +14,7 @@
     /* Interactive */
     --button: var(--primary);
     --button-foreground: 210 40% 98%;
- 
+    --footer: #002947;
   }
 
   .dark {
@@ -25,6 +26,7 @@
 
     --button: var(--primary);
     --button-foreground: 222 47% 6%;
+    --footer: #002947;
   }
 
   body {
@@ -42,6 +44,8 @@
 
   --color-button: hsl(var(--button));
   --color-button-foreground: hsl(var(--button-foreground));
+  --color-footer: var(--footer);
+
 }
 
 
@@ -73,3 +77,16 @@
          hover:scale-105 active:scale-95;
 }
 
+.footer-title {
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.footer-text {
+  color: white;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  text-align: justify;
+}
