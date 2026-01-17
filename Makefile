@@ -12,7 +12,7 @@ setup:
 
 restart:
 	$(COMPOSE_DEV) stop
-	$(COMPOSE_DEV) up
+	$(COMPOSE_DEV) up -d
 
 ## --- Stop running containers without removing ---
 stop:
@@ -24,7 +24,7 @@ down:
 
 ## --- View logs (live) ---
 logs:
-	$(COMPOSE_DEV) logs -f
+	$(COMPOSE_DEV) logs -f $(word 2,$(MAKECMDGOALS))
 
 ## --- Rebuild container (no cache) + rerun ---
 rebuild:

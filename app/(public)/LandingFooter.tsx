@@ -1,55 +1,113 @@
 "use client";
 
-import dynamic from "next/dynamic";
-const FooterMap = dynamic(() => import("../../components/FooterMap.tsx"), {
-  ssr: false,
-});
+import { useEffect, useState } from "react";
+
+const defaultFooterData = {
+  dataKantor: [
+    { type: "alamat", text: "" },
+    { type: "telp", text: "" },
+    { type: "email", text: "" },
+  ],
+  informasi: "",
+  kontak: [
+    { platform: "Instagram", url: "" },
+    { platform: "Whatsapp", url: "" },
+  ],
+  lokasi: [
+    { type: "Latitude", value: "" },
+    { type: "Longitude", value: "" },
+  ],
+};
 
 const LandingFooter = () => {
+  const [footerData, setFooterData] = useState(defaultFooterData);
+
+  useEffect(() => {
+    fetch("/api/admin/footer")
+      .then((res) => res.json())
+      .then((data) => {
+        setFooterData({
+          ...defaultFooterData,
+          ...data,
+        });
+      });
+  }, []);
+
+  const alamat =
+    footerData.dataKantor.find((i) => i.type === "alamat")?.text ||
+    "Lorem ipsum dolor sit amet";
+
+  const telp =
+    footerData.dataKantor.find((i) => i.type === "telp")?.text || "0000000000";
+
+  const email =
+    footerData.dataKantor.find((i) => i.type === "email")?.text ||
+    "lorem@ipsum.com";
+
+  const informasi =
+    footerData.informasi ||
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+
+  const lat = footerData.lokasi[0]?.value;
+  const lng = footerData.lokasi[1]?.value;
+
   return (
     <footer className="bg-footer">
       <div className="mx-auto max-w-[1600px] w-full">
-        <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-[1fr_auto] gap-0 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-[1fr_auto]">
           <div className="bg-[#285d8e] row-span-2 flex flex-col px-10 py-14 gap-4">
-            <h3 className="text-white text-lg font-medium">Kolom 1</h3>
+            <h3 className="text-white text-lg font-medium">Kontak</h3>
+
             <div className="flex items-center gap-3">
               <img src="/Location.png" className="h-5 w-5" />
-              <span className="text-white text-sm">Item pertama</span>
+              <span className="text-white text-sm">{alamat}</span>
             </div>
 
             <div className="flex items-center gap-3">
               <img src="/Phone.png" className="h-5 w-5" />
-              <span className="text-white text-sm">Item kedua</span>
+              <span className="text-white text-sm">{telp}</span>
             </div>
 
             <div className="flex items-center gap-3">
               <img src="/Email.png" className="h-5 w-5" />
-              <span className="text-white text-sm">Item ketiga</span>
+              <span className="text-white text-sm">{email}</span>
             </div>
           </div>
 
           <div className="flex flex-col px-10 py-14">
             <h3 className="footer-title">Informasi</h3>
-            <p className="footer-text">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            </p>
+            <p className="footer-text">{informasi}</p>
           </div>
 
           <div className="flex flex-col px-10 py-14">
             <h3 className="footer-title">Kontak Kami</h3>
             <div className="flex gap-3">
-              <img src="/Instagram.png" className="h-10 w-auto" />
-              <img src="/Whatsapp.png" className="h-10 w-auto" />
+              <a href={footerData.kontak[0]?.url || "#"} target="_blank">
+                <img src="/Instagram.png" className="h-10 w-auto" />
+              </a>
+
+              <a href={footerData.kontak[1]?.url || "#"} target="_blank">
+                <img src="/Whatsapp.png" className="h-10 w-auto" />
+              </a>
             </div>
           </div>
 
           <div className="flex flex-col px-10 py-14">
             <h3 className="footer-title">Navigasi Alamat</h3>
-            <iframe
-              title="Gedung Sate"
-              src={`https://maps.google.com/maps?q=-6.90096,107.61861&z=15&output=embed`}
-              className="w-full h-48 rounded border-0"
-            />
+
+            {lat && lng ? (
+              <iframe
+                title="Lokasi"
+                src={`https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed`}
+                className="w-full h-48 rounded border-0"
+              />
+            ) : (
+              <iframe
+                title="Lokasi"
+                src="https://maps.google.com/maps?q=-6.90096,107.61861&z=15&output=embed"
+                className="w-full h-48 rounded border-0"
+              />
+            )}
           </div>
 
           <div className="md:col-span-3 px-10 py-6 flex items-center justify-center">
