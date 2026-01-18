@@ -58,7 +58,7 @@ CREATE TABLE "verification" (
 
 -- CreateTable
 CREATE TABLE "home_carousel" (
-    "id" CHAR(36) NOT NULL,
+    "id" TEXT NOT NULL,
     "nomor_urut" INTEGER,
     "url" VARCHAR(255) NOT NULL,
     "status" BOOLEAN NOT NULL,
@@ -70,8 +70,8 @@ CREATE TABLE "home_carousel" (
 
 -- CreateTable
 CREATE TABLE "data_kantor" (
-    "id" CHAR(36) NOT NULL,
-    "nama_kantor" VARCHAR(255) NOT NULL,
+    "id" TEXT NOT NULL,
+    "logo_kantor" VARCHAR(255) NOT NULL,
     "deskripsi_kantor" VARCHAR(255) NOT NULL,
     "alamat_kantor" VARCHAR(255) NOT NULL,
     "nomor_kantor" VARCHAR(255) NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE "data_kantor" (
 
 -- CreateTable
 CREATE TABLE "faq" (
-    "id" CHAR(36) NOT NULL,
+    "id" TEXT NOT NULL,
     "pertanyaan" VARCHAR(255) NOT NULL,
     "jawaban" VARCHAR(255) NOT NULL,
     "created_at" TIMESTAMP(3),
@@ -98,7 +98,7 @@ CREATE TABLE "faq" (
 
 -- CreateTable
 CREATE TABLE "publikasi" (
-    "id" CHAR(36) NOT NULL,
+    "id" TEXT NOT NULL,
     "Judul" VARCHAR(255) NOT NULL,
     "Deskripsi" VARCHAR(255) NOT NULL,
     "url" VARCHAR(255) NOT NULL,
@@ -110,7 +110,7 @@ CREATE TABLE "publikasi" (
 
 -- CreateTable
 CREATE TABLE "mitra" (
-    "id" CHAR(36) NOT NULL,
+    "id" TEXT NOT NULL,
     "nama" VARCHAR(255) NOT NULL,
     "jawaban" VARCHAR(255) NOT NULL,
     "created_at" TIMESTAMP(3),
@@ -121,7 +121,7 @@ CREATE TABLE "mitra" (
 
 -- CreateTable
 CREATE TABLE "berita" (
-    "id" CHAR(36) NOT NULL,
+    "id" TEXT NOT NULL,
     "nomor_urut" INTEGER,
     "nama" VARCHAR(255) NOT NULL,
     "deskripsi" VARCHAR(255) NOT NULL,

@@ -8,7 +8,7 @@ up:
 
 setup:
 	$(COMPOSE_DEV) build --no-cache
-	$(COMPOSE_DEV) up
+	$(COMPOSE_DEV) up -d
 
 restart:
 	$(COMPOSE_DEV) stop
