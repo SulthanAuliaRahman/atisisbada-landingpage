@@ -6,7 +6,7 @@ import { LogoPreview } from "@/components/LogoPreview";
 const AdminFooter = () => {
   const [footerData, setFooterData] = useState({
     dataKantor: [
-      { type: "logo", src: "", fileName: "" },
+      { type: "logo", src: "", fileName: "", file: null as File | null },
       { type: "alamat", text: "" },
       { type: "telp", text: "" },
       { type: "email", text: "" },
@@ -30,15 +30,17 @@ const AdminFooter = () => {
         const data = await res.json();
 
         const logoFromApi = data.dataKantor?.find(
-          (item) => item.type === "logo",
+          (item: any) => item.type === "logo",
         );
 
         const otherDataKantor =
-          data.dataKantor?.filter((item) => item.type !== "logo") || [];
+          data.dataKantor?.filter((item: any) => item.type !== "logo") || [];
 
         const types = ["alamat", "telp", "email"];
         const mergedOtherData = types.map((type) => {
-          const existing = otherDataKantor.find((item) => item.type === type);
+          const existing = otherDataKantor.find(
+            (item: any) => item.type === type,
+          );
           return existing || { type, text: "" };
         });
 
@@ -52,7 +54,6 @@ const AdminFooter = () => {
           informasi: data.informasi || "",
           kontak: data.kontak?.length ? data.kontak : footerData.kontak,
           lokasi: data.lokasi?.length ? data.lokasi : footerData.lokasi,
-          copyright: data.copyright || "",
         });
       } catch (error) {
         console.error(error);
@@ -62,11 +63,18 @@ const AdminFooter = () => {
     fetchFooter();
   }, []);
 
-  const handleChange = (section, index, key, value) => {
+  const handleChange = (
+    section: keyof typeof footerData,
+    index: number | null,
+    key: string | null,
+    value: any,
+  ) => {
     if (Array.isArray(footerData[section])) {
-      const newArr = [...footerData[section]];
-      newArr[index][key] = value;
-      setFooterData({ ...footerData, [section]: newArr });
+      const newArr = [...footerData[section]] as any[];
+      if (index !== null && key !== null) {
+        newArr[index][key] = value;
+        setFooterData({ ...footerData, [section]: newArr });
+      }
     } else {
       setFooterData({ ...footerData, [section]: value });
     }
@@ -76,10 +84,11 @@ const AdminFooter = () => {
     try {
       const formData = new FormData();
 
-      const logoFile = footerData.dataKantor.find(
-        (i) => i.type === "logo",
-      )?.file;
-      if (logoFile) {
+      // Ambil file object, bukan fileName
+      const logoItem = footerData.dataKantor.find((i) => i.type === "logo");
+      const logoFile = logoItem?.file; // Ambil file object
+
+      if (logoFile && logoFile instanceof File) {
         formData.append("logo", logoFile);
       }
 
@@ -90,7 +99,6 @@ const AdminFooter = () => {
           informasi: footerData.informasi,
           kontak: footerData.kontak,
           lokasi: footerData.lokasi,
-          copyright: footerData.copyright,
         }),
       );
 
@@ -129,9 +137,7 @@ const AdminFooter = () => {
         ...item,
         value: item.value || (i === 0 ? "-6.200000" : "106.816666"),
       })),
-      copyright:
-        footerData.copyright ||
-        "© Copyright 2020 Pilar Wahana Artha | All Rights Reserved.",
+      copyright: "© Copyright 2020 Pilar Wahana Artha | All Rights Reserved.",
     };
   };
 

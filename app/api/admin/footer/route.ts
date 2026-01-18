@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import fs from "fs";
 import path from "path";
-import { IncomingForm } from "formidable";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +13,6 @@ export const config = {
 
 export async function POST(req: Request) {
   const formData = await req.formData();
-
   const logoFile = formData.get("logo") as File | null;
   const bodyJson = formData.get("body") as string;
 
@@ -31,9 +29,11 @@ export async function POST(req: Request) {
     fs.writeFileSync(destPath, buffer);
   }
 
-  const result = await prisma.$queryRaw<{ id: string }[]>`
+  // Tambahkan [] untuk menandakan ini adalah array
+  const result = await prisma.$queryRaw<Array<{ id: string }>>`
     SELECT id FROM data_kantor LIMIT 1
   `;
+
   const kantor = result[0];
 
   const alamat =
@@ -50,7 +50,18 @@ export async function POST(req: Request) {
     body.lokasi?.find((i: any) => i.type === "Longitude")?.value || "0";
 
   if (kantor) {
-    const updated = await prisma.$executeRaw`
+    const updated = await prisma.$queryRaw<
+      Array<{
+        id: string;
+        alamat_kantor: string;
+        nomor_kantor: string;
+        email_kantor: string;
+        deskripsi_kantor: string;
+        url_instagram_kantor: string;
+        latitude: string;
+        longitude: string;
+      }>
+    >`
       UPDATE data_kantor
       SET
         alamat_kantor = ${alamat},
@@ -64,13 +75,25 @@ export async function POST(req: Request) {
       WHERE id = ${kantor.id}
       RETURNING *;
     `;
+
     return NextResponse.json({
       message: "Data kantor diperbarui",
-      data: updated,
+      data: updated[0],
     });
   }
 
-  const created = await prisma.$executeRaw`
+  const created = await prisma.$queryRaw<
+    Array<{
+      id: string;
+      alamat_kantor: string;
+      nomor_kantor: string;
+      email_kantor: string;
+      deskripsi_kantor: string;
+      url_instagram_kantor: string;
+      latitude: string;
+      longitude: string;
+    }>
+  >`
     INSERT INTO data_kantor
       (id, alamat_kantor, nomor_kantor, email_kantor,
        deskripsi_kantor, url_instagram_kantor, latitude, longitude, created_at, updated_at)
@@ -80,19 +103,22 @@ export async function POST(req: Request) {
     RETURNING *;
   `;
 
-  return NextResponse.json({ message: "Data kantor dibuat", data: created });
+  return NextResponse.json({ message: "Data kantor dibuat", data: created[0] });
 }
+
 export async function GET() {
-  const result = await prisma.$queryRaw<{
-    id: string;
-    deskripsi_kantor: string;
-    alamat_kantor: string;
-    nomor_kantor: string;
-    email_kantor: string;
-    url_instagram_kantor: string;
-    latitude: string;
-    longitude: string;
-  }>`SELECT * FROM data_kantor LIMIT 1`;
+  const result = await prisma.$queryRaw<
+    Array<{
+      id: string;
+      deskripsi_kantor: string;
+      alamat_kantor: string;
+      nomor_kantor: string;
+      email_kantor: string;
+      url_instagram_kantor: string;
+      latitude: string;
+      longitude: string;
+    }>
+  >`SELECT * FROM data_kantor LIMIT 1`;
 
   const kantor = result[0];
 
