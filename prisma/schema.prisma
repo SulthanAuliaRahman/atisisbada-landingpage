@@ -79,6 +79,7 @@ model HomeCarousel {
 id String @id @default(uuid())
 nomor_urut Int?
 url String @db.VarChar(255)
+//alt String @db.VarChar(255) // ini untuk deskripsi data atau ketika gambar tidak terload
 status Boolean
 created_at DateTime?
 updated_at DateTime?

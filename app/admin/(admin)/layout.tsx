@@ -7,11 +7,11 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AdminGuard>
+    // <AdminGuard>
       <div className="flex min-h-screen">
         <AdminSidebar />
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
-    </AdminGuard>
+    // </AdminGuard>
   );
 }
