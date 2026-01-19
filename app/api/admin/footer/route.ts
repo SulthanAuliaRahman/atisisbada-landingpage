@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import fs from "fs";
 import path from "path";
+import {
+  extractInstagramUsername,
+  extractWhatsAppNumber,
+} from "@/app/admin/utils/ExtractLink";
 
 export const dynamic = "force-dynamic";
 
@@ -10,31 +14,6 @@ export const config = {
     bodyParser: false,
   },
 };
-
-function extractInstagramUsername(input: string): string {
-  if (!input) return "";
-  try {
-    const url = new URL(input);
-    if (url.hostname.includes("instagram.com")) {
-      return url.pathname.replace(/\//g, "").split("?")[0];
-    }
-  } catch {
-    return input.replace("@", "").trim();
-  }
-  return input;
-}
-
-function extractWhatsAppNumber(input: string): string {
-  if (!input) return "";
-  const cleaned = input.replace(/[^0-9]/g, "");
-  if (input.includes("wa.me")) {
-    return cleaned;
-  }
-  if (input.includes("whatsapp")) {
-    return cleaned;
-  }
-  return cleaned;
-}
 
 export async function POST(req: Request) {
   const formData = await req.formData();

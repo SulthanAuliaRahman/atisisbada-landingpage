@@ -1,6 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { LogoPreview } from "@/components/LogoPreview";
+import {
+  extractInstagramUsername,
+  extractWhatsAppNumber,
+} from "@/app/admin/utils/ExtractLink";
 
 const AdminFooter = () => {
   const [saving, setSaving] = useState(false);
@@ -49,9 +53,17 @@ const AdminFooter = () => {
   }, []);
 
   const handleChange = (key: keyof typeof footerData, value: any) => {
+    let cleanedValue = value;
+
+    if (key === "instagram") {
+      cleanedValue = extractInstagramUsername(value);
+    } else if (key === "whatsapp") {
+      cleanedValue = extractWhatsAppNumber(value);
+    }
+
     setFooterData((prev) => ({
       ...prev,
-      [key]: value,
+      [key]: cleanedValue,
     }));
   };
 

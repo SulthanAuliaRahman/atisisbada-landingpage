@@ -4,22 +4,17 @@ import { useEffect, useState } from "react";
 import { LogoPreview } from "@/components/LogoPreview";
 
 const defaultFooterData = {
-  dataKantor: [
-    { type: "logo", src: "" },
-    { type: "alamat", text: "" },
-    { type: "telp", text: "" },
-    { type: "email", text: "" },
-  ],
-  informasi: "",
-  kontak: [
-    { platform: "Instagram", url: "" },
-    { platform: "Whatsapp", url: "" },
-  ],
-  lokasi: [
-    { type: "Latitude", value: "" },
-    { type: "Longitude", value: "" },
-  ],
-  copyright: "",
+  logoSrc: "",
+  logoFileName: "",
+  logoFile: null as File | null,
+  alamat: "",
+  telp: "",
+  email: "",
+  deskripsi: "",
+  instagram: "",
+  whatsapp: "",
+  latitude: "",
+  longitude: "",
 };
 
 const LandingFooter = () => {
@@ -41,19 +36,14 @@ const LandingFooter = () => {
       });
   }, []);
 
-  const alamat =
-    footerData.dataKantor.find((i) => i.type === "alamat")?.text ||
-    "Lorem ipsum dolor sit amet";
-  const telp =
-    footerData.dataKantor.find((i) => i.type === "telp")?.text || "0000000000";
-  const email =
-    footerData.dataKantor.find((i) => i.type === "email")?.text ||
-    "lorem@ipsum.com";
+  const alamat = footerData.alamat || "Lorem ipsum dolor sit amet";
+  const telp = footerData.telp || "0000000000";
+  const email = footerData.email || "lorem@ipsum.com";
   const informasi =
-    footerData.informasi ||
+    footerData.deskripsi ||
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
-  const lat = footerData.lokasi[0]?.value;
-  const lng = footerData.lokasi[1]?.value;
+  const lat = footerData.latitude || 0;
+  const lng = footerData.longitude || 0;
 
   return (
     <footer className="bg-footer">
@@ -84,7 +74,11 @@ const LandingFooter = () => {
             </h3>
             <div className="flex gap-3">
               <a
-                href={footerData.kontak[0]?.url || "#"}
+                href={
+                  footerData.instagram
+                    ? `https://instagram.com/${footerData.instagram}`
+                    : "https://instagram.com"
+                }
                 target="_blank"
                 rel="noreferrer"
               >
@@ -96,9 +90,9 @@ const LandingFooter = () => {
               </a>
               <a
                 href={
-                  footerData.kontak[1]?.url
-                    ? `https://wa.me/${footerData.kontak[1].url.replace(/\D/g, "")}`
-                    : "#"
+                  footerData.whatsapp
+                    ? `https://wa.me/${footerData.whatsapp.replace(/\D/g, "")}`
+                    : "https://wa.me/"
                 }
                 target="_blank"
                 rel="noreferrer"
