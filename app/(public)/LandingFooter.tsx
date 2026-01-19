@@ -125,8 +125,7 @@ const LandingFooter = () => {
           </div>
           <div className="md:col-span-3 px-10 py-6 flex items-center justify-center">
             <p className="text-white/80 text-sm">
-              {footerData.copyright ||
-                "© Copyright 2026 Pilar Wahana Artha | All rights reserved."}
+              © Copyright 2026 Pilar Wahana Artha | All rights reserved.
             </p>
           </div>
         </div>
