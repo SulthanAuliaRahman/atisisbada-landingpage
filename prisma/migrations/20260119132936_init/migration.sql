@@ -71,10 +71,10 @@ CREATE TABLE "home_carousel" (
 -- CreateTable
 CREATE TABLE "data_kantor" (
     "id" TEXT NOT NULL,
-    "logo_kantor" VARCHAR(255) NOT NULL,
     "deskripsi_kantor" VARCHAR(255) NOT NULL,
     "alamat_kantor" VARCHAR(255) NOT NULL,
     "nomor_kantor" VARCHAR(255) NOT NULL,
+    "nomor_whatsapp" VARCHAR(255) NOT NULL,
     "email_kantor" VARCHAR(255) NOT NULL,
     "url_instagram_kantor" VARCHAR(255) NOT NULL,
     "longitude" VARCHAR(255) NOT NULL,

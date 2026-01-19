@@ -11,57 +11,109 @@ export const config = {
   },
 };
 
+function extractInstagramUsername(input: string): string {
+  if (!input) return "";
+  try {
+    const url = new URL(input);
+    if (url.hostname.includes("instagram.com")) {
+      return url.pathname.replace(/\//g, "").split("?")[0];
+    }
+  } catch {
+    return input.replace("@", "").trim();
+  }
+  return input;
+}
+
+function extractWhatsAppNumber(input: string): string {
+  if (!input) return "";
+  const cleaned = input.replace(/[^0-9]/g, "");
+  if (input.includes("wa.me")) {
+    return cleaned;
+  }
+  if (input.includes("whatsapp")) {
+    return cleaned;
+  }
+  return cleaned;
+}
+
 export async function POST(req: Request) {
   const formData = await req.formData();
   const logoFile = formData.get("logo") as File | null;
   const bodyJson = formData.get("body") as string;
 
   if (!bodyJson) {
-    return NextResponse.json({ message: "Missing body" }, { status: 400 });
+    return NextResponse.json(
+      { message: "Validasi gagal", errors: { body: "Body wajib diisi" } },
+      { status: 400 },
+    );
   }
 
-  const body = JSON.parse(bodyJson);
+  let body: any;
+  try {
+    body = JSON.parse(bodyJson);
+  } catch {
+    return NextResponse.json(
+      {
+        message: "Validasi gagal",
+        errors: { body: "Format body tidak valid" },
+      },
+      { status: 400 },
+    );
+  }
+
+  const errors: Record<string, string> = {};
+
+  if (!body.alamat) errors.alamat = "Alamat wajib diisi";
+  if (!body.telp) errors.telp = "Nomor telepon wajib diisi";
+  if (!body.email) errors.email = "Email wajib diisi";
+  if (!body.longitude) errors.longitude = "Titik longitude kantor wajib diisi";
+  if (!body.latitude) errors.latitude = "Titik Latitude kantor wajib diisi";
+
+  if (logoFile && !logoFile.type.startsWith("image/")) {
+    errors.logo = "File logo harus berupa gambar";
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return NextResponse.json(
+      { message: "Validasi gagal", errors },
+      { status: 400 },
+    );
+  }
+
+  const isDev = process.env.NODE_ENV === "development";
+
+  const UPLOAD_DIR = isDev
+    ? path.join(process.cwd(), "public")
+    : "/var/www/storage";
+
+  const LOGO_PATH = path.join(UPLOAD_DIR, "logo.png");
 
   if (logoFile) {
-    const arrayBuffer = await logoFile.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const destPath = path.join(process.cwd(), "public/logo.png");
-    fs.writeFileSync(destPath, buffer);
+    if (!fs.existsSync(UPLOAD_DIR)) {
+      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+    }
+
+    const buffer = Buffer.from(await logoFile.arrayBuffer());
+    fs.writeFileSync(LOGO_PATH, buffer);
   }
 
-  // Tambahkan [] untuk menandakan ini adalah array
+  const alamat = body.alamat;
+  const telp = body.telp;
+  const email = body.email;
+  const deskripsi = body.deskripsi || "";
+  const instagram = extractInstagramUsername(body.instagram || "");
+  const whatsapp = extractWhatsAppNumber(body.whatsapp || "");
+  const latitude = body.latitude || "0";
+  const longitude = body.longitude || "0";
+
   const result = await prisma.$queryRaw<Array<{ id: string }>>`
     SELECT id FROM data_kantor LIMIT 1
   `;
 
   const kantor = result[0];
 
-  const alamat =
-    body.dataKantor.find((i: any) => i.type === "alamat")?.text || "";
-  const telp = body.dataKantor.find((i: any) => i.type === "telp")?.text || "";
-  const email =
-    body.dataKantor.find((i: any) => i.type === "email")?.text || "";
-  const deskripsi = body.informasi || "";
-  const instagram =
-    body.kontak?.find((i: any) => i.platform === "Instagram")?.url || "";
-  const latitude =
-    body.lokasi?.find((i: any) => i.type === "Latitude")?.value || "0";
-  const longitude =
-    body.lokasi?.find((i: any) => i.type === "Longitude")?.value || "0";
-
   if (kantor) {
-    const updated = await prisma.$queryRaw<
-      Array<{
-        id: string;
-        alamat_kantor: string;
-        nomor_kantor: string;
-        email_kantor: string;
-        deskripsi_kantor: string;
-        url_instagram_kantor: string;
-        latitude: string;
-        longitude: string;
-      }>
-    >`
+    const updated = await prisma.$queryRaw<Array<any>>`
       UPDATE data_kantor
       SET
         alamat_kantor = ${alamat},
@@ -69,6 +121,7 @@ export async function POST(req: Request) {
         email_kantor = ${email},
         deskripsi_kantor = ${deskripsi},
         url_instagram_kantor = ${instagram},
+        nomor_whatsapp = ${whatsapp},
         latitude = ${latitude},
         longitude = ${longitude},
         updated_at = NOW()
@@ -82,28 +135,22 @@ export async function POST(req: Request) {
     });
   }
 
-  const created = await prisma.$queryRaw<
-    Array<{
-      id: string;
-      alamat_kantor: string;
-      nomor_kantor: string;
-      email_kantor: string;
-      deskripsi_kantor: string;
-      url_instagram_kantor: string;
-      latitude: string;
-      longitude: string;
-    }>
-  >`
+  const created = await prisma.$queryRaw<Array<any>>`
     INSERT INTO data_kantor
       (id, alamat_kantor, nomor_kantor, email_kantor,
-       deskripsi_kantor, url_instagram_kantor, latitude, longitude, created_at, updated_at)
+       deskripsi_kantor, nomor_whatsapp, url_instagram_kantor,
+       latitude, longitude, created_at, updated_at)
     VALUES
       (gen_random_uuid(), ${alamat}, ${telp}, ${email},
-       ${deskripsi}, ${instagram}, ${latitude}, ${longitude}, NOW(), NOW())
+       ${deskripsi}, ${whatsapp}, ${instagram},
+       ${latitude}, ${longitude}, NOW(), NOW())
     RETURNING *;
   `;
 
-  return NextResponse.json({ message: "Data kantor dibuat", data: created[0] });
+  return NextResponse.json({
+    message: "Data kantor dibuat",
+    data: created[0],
+  });
 }
 
 export async function GET() {
@@ -124,33 +171,25 @@ export async function GET() {
 
   if (!kantor) {
     return NextResponse.json({
-      dataKantor: [],
-      informasi: "",
-      kontak: [],
-      lokasi: [],
+      alamat: "",
+      telp: "",
+      email: "",
+      deskripsi: "",
+      instagram: "",
+      whatsapp: "",
+      latitude: "",
+      longitude: "",
     });
   }
 
   return NextResponse.json({
-    dataKantor: [
-      { type: "alamat", text: kantor.alamat_kantor },
-      { type: "telp", text: kantor.nomor_kantor },
-      { type: "email", text: kantor.email_kantor },
-    ],
-    informasi: kantor.deskripsi_kantor,
-    kontak: [
-      {
-        platform: "Instagram",
-        url: kantor.url_instagram_kantor,
-      },
-      {
-        platform: "Whatsapp",
-        url: kantor.nomor_kantor,
-      },
-    ],
-    lokasi: [
-      { type: "Latitude", value: kantor.latitude },
-      { type: "Longitude", value: kantor.longitude },
-    ],
+    alamat: kantor.alamat_kantor,
+    telp: kantor.nomor_kantor,
+    email: kantor.email_kantor,
+    deskripsi: kantor.deskripsi_kantor,
+    instagram: kantor.url_instagram_kantor,
+    whatsapp: kantor.nomor_kantor,
+    latitude: kantor.latitude,
+    longitude: kantor.longitude,
   });
 }
