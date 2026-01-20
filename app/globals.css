@@ -5,6 +5,7 @@
     /* Core */
     --background: 210 40% 98%; /* light blue-gray */
     --foreground: 222 47% 11%; /* deep navy text */
+    --border-colour: 0 0% 0%;
 
     /* Brand */
     --primary: 220 90% 56%; /* BLUE */
@@ -22,6 +23,7 @@
   .dark {
     --background: 222 47% 6%; /* deep blue-black */
     --foreground: 213 31% 91%; /* soft blue-white */
+    --border-colour: 255 100% 100%;
 
     --primary: 220 90% 65%; /* brighter blue */
     --secondary: 200 85% 60%;

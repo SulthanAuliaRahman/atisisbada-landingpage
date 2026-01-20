@@ -6,7 +6,7 @@ import LandingFaqs from "@/app/(public)/LandingFAQs";
 // this is landing page
 export default function LandingPage() {
   return (
-    <div className="max-h-screen bg-white overflow-x-hidden">
+    <div className=" bg-white overflow-x-hidden">
       {/* per-section */}
       <main>
         <LandingCarousel/>
