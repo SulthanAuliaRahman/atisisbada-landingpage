@@ -14,7 +14,7 @@ const FAQItem: React.FC<FAQItemProps> = ({
   onToggle,
 }) => {
   return (
-    <div className="border border-border-colour rounded-full px-6 py-4 flex flex-col">
+    <div className="border border-border-colour bg-card rounded-full px-6 py-4 flex flex-col">
       <button
         onClick={onToggle}
         aria-expanded={isOpen}

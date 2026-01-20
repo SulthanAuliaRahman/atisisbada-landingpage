@@ -16,7 +16,7 @@
     --button-foreground: 210 40% 98%;
     --footer: #002947;
 
-    --card: 0 0% 100%; /* white */
+    --card: 210 40% 98%; /* white  Probably Changed back to  0 0% 100%; */ 
     --card-border: 220 13% 91%; /* light gray border */
   }
 
