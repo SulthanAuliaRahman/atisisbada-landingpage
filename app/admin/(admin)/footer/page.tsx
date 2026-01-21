@@ -4,7 +4,7 @@ import { LogoPreview } from "@/components/LogoPreview";
 import {
   extractInstagramUsername,
   extractWhatsAppNumber,
-} from "@/app/admin/utils/ExtractLink";
+} from "@/app/utils/ExtractLink";
 
 const AdminFooter = () => {
   const [saving, setSaving] = useState(false);

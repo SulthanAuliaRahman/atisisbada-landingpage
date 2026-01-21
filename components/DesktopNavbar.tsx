@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -21,15 +21,14 @@ const DesktopNav = ({ navItems, onCtaClick }: DesktopNavProps) => {
   return (
     <>
       {/* Logo */}
-      <Link href="/" className="flex items-center gap-2 font-bold text-xl">
+      <Link href="#" className="flex items-center gap-2 font-bold text-xl">
         <Image
-          src="/globe.svg"
+          src="/logo-navbar.png"
           alt="Atisisbada Logo"
-          width={24}
-          height={24}
+          width={200}
+          height={200}
           priority
         />
-        <span>Atisisbada</span>
       </Link>
 
       {/* Desktop Menu */}
@@ -43,7 +42,9 @@ const DesktopNav = ({ navItems, onCtaClick }: DesktopNavProps) => {
                 href={item.href}
                 className={cn(
                   "relative font-medium transition-colors",
-                  isActive ? "text-primary" : "text-foreground/80 hover:text-primary"
+                  isActive
+                    ? "text-primary"
+                    : "text-foreground/80 hover:text-primary",
                 )}
               >
                 {item.name}
@@ -60,10 +61,7 @@ const DesktopNav = ({ navItems, onCtaClick }: DesktopNavProps) => {
 
       {/* Kontak Kami Button */}
       <div className="hidden md:block">
-        <button
-          className="regular-button"
-          onClick={onCtaClick}
-        >
+        <button className="regular-button" onClick={onCtaClick}>
           Kontak Kami
         </button>
       </div>

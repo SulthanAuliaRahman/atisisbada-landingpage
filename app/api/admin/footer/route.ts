@@ -5,7 +5,7 @@ import path from "path";
 import {
   extractInstagramUsername,
   extractWhatsAppNumber,
-} from "@/app/admin/utils/ExtractLink";
+} from "@/app/utils/ExtractLink";
 
 export const dynamic = "force-dynamic";
 
