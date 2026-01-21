@@ -33,7 +33,7 @@ const DesktopNav = ({ navItems, onCtaClick }: DesktopNavProps) => {
       </Link>
 
       {/* Desktop Menu */}
-      <ul className="hidden md:flex items-center gap-4">
+      <ul className="hidden md:flex items-center gap-8">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
 
