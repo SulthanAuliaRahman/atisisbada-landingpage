@@ -5,6 +5,7 @@ import {
   extractInstagramUsername,
   extractWhatsAppNumber,
 } from "@/app/utils/ExtractLink";
+import AlertMessage from "@/components/AlertMessage";
 
 const AdminFooter = () => {
   const [saving, setSaving] = useState(false);
@@ -51,6 +52,13 @@ const AdminFooter = () => {
 
     fetchFooter();
   }, []);
+
+  useEffect(() => {
+    if (!saveMessage) return;
+
+    const t = setTimeout(() => setSaveMessage(null), 3000);
+    return () => clearTimeout(t);
+  }, [saveMessage]);
 
   const handleChange = (key: keyof typeof footerData, value: any) => {
     let cleanedValue = value;
@@ -108,10 +116,9 @@ const AdminFooter = () => {
         return;
       }
 
-      console.log("tes");
       setSaveMessage("Data berhasil disimpan");
-    } catch (e) {
-      setSaveMessage("Server tidak merespons");
+    } catch (e: any) {
+      setSaveMessage(e?.message || "Terjadi kesalahan pada server");
     } finally {
       setSaving(false);
     }
@@ -119,17 +126,8 @@ const AdminFooter = () => {
 
   return (
     <div className="flex flex-col gap-6 p-6 w-full bg-background min-h-screen">
-      {saveMessage && (
-        <div
-          className={`p-3 rounded text-sm ${
-            saveMessage === "Data berhasil disimpan"
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {saveMessage}
-        </div>
-      )}
+      <AlertMessage message={saveMessage} />
+      <h1 className="text-lg sm:text-2xl font-bold">Kelola FooteFooterr</h1>
       {/* Form Panel - Grid 2 Kolom */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Data Kantor */}
@@ -337,7 +335,7 @@ const AdminFooter = () => {
           onClick={handleSave}
           className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
         >
-          Simpan Perubahan
+          Simpan
         </button>
       </div>
 

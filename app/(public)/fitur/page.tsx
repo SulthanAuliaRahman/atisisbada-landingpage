@@ -4,72 +4,26 @@ import { useState, useEffect } from "react";
 import LandingModule from "@/app/(public)/LandingModule";
 import LandingFaqs from "@/app/(public)/LandingFAQs";
 
+type Fitur = {
+  id: string;
+  ikon: string;
+  nama: string;
+  deskripsi: string;
+  urutan: number;
+  status: boolean;
+};
+
 const FiturPage = () => {
-  const fiturPageData = [
-    {
-      no: 1,
-      ikon: "/fitur/input-gambar.svg",
-      nama: "Input Gambar",
-      deskripsi: "Tambah, ubah, dan atur hak akses pengguna.",
-    },
-    {
-      no: 2,
-      ikon: "/fitur/dokumen.svg",
-      nama: "Dokumen, Sertifikat dll",
-      deskripsi: "Pantau data dan aktivitas secara langsung.",
-    },
-    {
-      no: 3,
-      ikon: "/fitur/terhubung.svg",
-      nama: "Terhubung 24 Jam",
-      deskripsi: "Hubungkan sistem dengan layanan lain.",
-    },
-    {
-      no: 4,
-      ikon: "/fitur/koordinat.svg",
-      nama: "Koordinat Lokasi",
-      deskripsi: "Lindungi data dengan kontrol dan enkripsi.",
-    },
-    {
-      no: 5,
-      ikon: "/fitur/barcode.svg",
-      nama: "Barcode & QR Code",
-      deskripsi: "Lindungi data dengan kontrol dan enkripsi.",
-    },
-    {
-      no: 6,
-      ikon: "/fitur/barcode.svg",
-      nama: "Barcode & QR Code",
-      deskripsi: "Lindungi data dengan kontrol dan enkripsi.",
-    },
-    {
-      no: 7,
-      ikon: "/fitur/barcode.svg",
-      nama: "Barcode & QR Code",
-      deskripsi: "Lindungi data dengan kontrol dan enkripsi.",
-    },
-    {
-      no: 8,
-      ikon: "/fitur/barcode.svg",
-      nama: "Barcode & QR Code",
-      deskripsi: "Lindungi data dengan kontrol dan enkripsi.",
-    },
-    {
-      no: 9,
-      ikon: "/fitur/barcode.svg",
-      nama: "Barcode & QR Code",
-      deskripsi: "Lindungi data dengan kontrol dan enkripsi.",
-    },
-  ];
+  const [fiturData, setFiturData] = useState<Fitur[]>([]);
+  const [itemsPerSlide, setItemsPerSlide] = useState(8);
+  const [slide, setSlide] = useState(0);
+
   const getItemsPerSlide = () => {
     if (typeof window === "undefined") return 8;
     if (window.innerWidth < 640) return 4;
     if (window.innerWidth < 1024) return 6;
     return 8;
   };
-
-  const [itemsPerSlide, setItemsPerSlide] = useState(8);
-  const [slide, setSlide] = useState(0);
 
   useEffect(() => {
     const update = () => setItemsPerSlide(getItemsPerSlide());
@@ -82,20 +36,31 @@ const FiturPage = () => {
     setSlide(0);
   }, [itemsPerSlide]);
 
-  const totalSlide = Math.ceil(fiturPageData.length / itemsPerSlide);
+  useEffect(() => {
+    const loadFitur = async () => {
+      try {
+        const res = await fetch("/api/admin/fitur");
+        const json = await res.json();
 
-  const currentData = fiturPageData.slice(
-    slide * itemsPerSlide,
-    slide * itemsPerSlide + itemsPerSlide,
-  );
+        const aktif = json.data.filter((f: Fitur) => f.status === true);
+        setFiturData(aktif);
+      } catch (e) {
+        console.error("Gagal load fitur", e);
+      }
+    };
+
+    loadFitur();
+  }, []);
+
+  const totalSlide = Math.ceil(fiturData.length / itemsPerSlide);
+
   return (
     <div>
-      {" "}
       <div className="bg-[#D9D9D9] px-6 py-20">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-8">
-          {" "}
-          Fitur{" "}
+          Fitur
         </h2>
+
         <div className="flex justify-center gap-2 mt-6">
           {Array.from({ length: totalSlide }).map((_, i) => (
             <div
@@ -106,6 +71,7 @@ const FiturPage = () => {
             />
           ))}
         </div>
+
         <div className="relative">
           {slide > 0 && (
             <button
@@ -134,7 +100,7 @@ const FiturPage = () => {
               }}
             >
               {Array.from({ length: totalSlide }).map((_, slideIndex) => {
-                const slideData = fiturPageData.slice(
+                const slideData = fiturData.slice(
                   slideIndex * itemsPerSlide,
                   slideIndex * itemsPerSlide + itemsPerSlide,
                 );
@@ -146,24 +112,21 @@ const FiturPage = () => {
                     style={{ width: `${100 / totalSlide}%` }}
                   >
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-                      {" "}
                       {slideData.map((item) => (
                         <div
-                          key={item.no}
+                          key={item.id}
                           className="flex flex-col items-center text-center gap-3"
                         >
-                          {" "}
                           <img
                             src={item.ikon}
                             alt={item.nama}
                             className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20"
-                          />{" "}
+                          />
                           <span className="text-sm sm:text-base font-medium">
-                            {" "}
-                            {item.nama}{" "}
-                          </span>{" "}
+                            {item.nama}
+                          </span>
                         </div>
-                      ))}{" "}
+                      ))}
                     </div>
                   </div>
                 );
@@ -172,6 +135,7 @@ const FiturPage = () => {
           </div>
         </div>
       </div>
+
       <LandingModule />
       <LandingFaqs />
     </div>
@@ -179,4 +143,3 @@ const FiturPage = () => {
 };
 
 export default FiturPage;
-

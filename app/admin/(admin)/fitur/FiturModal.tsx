@@ -46,6 +46,7 @@ export default function FiturModal({ data, onClose, onSave }: any) {
 
     onSave({
       id: data.id,
+      uiId: data.uiId,
       nama,
       deskripsi,
       ikon: ikonFile ? URL.createObjectURL(ikonFile) : data.ikon,

@@ -142,3 +142,17 @@ created_at DateTime?
 updated_at DateTime?
 @@map("berita")
 }
+
+model Fitur {
+id String @id @default(uuid())
+urutan Int
+ikon String
+nama String
+deskripsi String
+status Boolean @default(true)
+
+created_at DateTime @default(now())
+updated_at DateTime @updatedAt
+@@map("fitur")
+
+}

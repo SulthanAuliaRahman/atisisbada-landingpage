@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   DndContext,
   closestCenter,
@@ -16,32 +16,44 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import FiturModal from "./FiturModal";
+import AlertMessage from "@/components/AlertMessage";
 
-const initialData = [
-  {
-    id: "1",
-    ikon: "/fitur/input-gambar.svg",
-    nama: "Input Gambar",
-    deskripsi: "Tambah, ubah, dan atur hak akses pengguna.",
-  },
-  {
-    id: "2",
-    ikon: "/fitur/dokumen.svg",
-    nama: "Dokumen, Sertifikat dll",
-    deskripsi: "Pantau data dan aktivitas secara langsung.",
-  },
-  {
-    id: "3",
-    ikon: "/fitur/terhubung.svg",
-    nama: "Terhubung 24 Jam",
-    deskripsi: "Hubungkan sistem dengan layanan lain.",
-  },
-];
+const initialData = [];
 
 export default function AdminFitur() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState<any[]>([]);
   const [modal, setModal] = useState<any>(null);
   const [context, setContext] = useState<any>(null);
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadFitur();
+  }, []);
+
+  useEffect(() => {
+    if (!saveMessage) return;
+
+    const t = setTimeout(() => setSaveMessage(null), 3000);
+    return () => clearTimeout(t);
+  }, [saveMessage]);
+
+  const loadFitur = async () => {
+    try {
+      const res = await fetch("/api/admin/fitur");
+      const json = await res.json();
+
+      const mapped = json.data.map((f: any) => ({
+        ...f,
+        status: parseStatus(f.status),
+        uiId: crypto.randomUUID(),
+      }));
+
+      console.log("data:", mapped);
+      setData(mapped);
+    } catch (e) {
+      console.error("Gagal load fitur", e);
+    }
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -57,27 +69,69 @@ export default function AdminFitur() {
     if (!over || active.id === over.id) return;
 
     setData((items) => {
-      const oldIndex = items.findIndex((i) => i.id === active.id);
-      const newIndex = items.findIndex((i) => i.id === over.id);
+      const oldIndex = items.findIndex((i) => i.uiId === active.id);
+      const newIndex = items.findIndex((i) => i.uiId === over.id);
+
+      if (oldIndex === -1 || newIndex === -1) return items;
+
       return arrayMove(items, oldIndex, newIndex);
     });
   };
 
   const isLastRowSingle = (data.length + 1) % 4 === 1;
+  const saveAllFitur = async () => {
+    setSaveMessage(null);
+    try {
+      const dataToSend = await Promise.all(
+        data.map(async (f) => {
+          let ikon = f.ikon;
+          const fileToBase64 = (file: File): Promise<string> => {
+            return new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => {
+                resolve(reader.result as string);
+              };
+              reader.onerror = reject;
+              reader.readAsDataURL(file);
+            });
+          };
+
+          if (f.ikonFile) {
+            ikon = await fileToBase64(f.ikonFile);
+          }
+          return {
+            id: f.id,
+            nama: f.nama,
+            deskripsi: f.deskripsi,
+            ikon,
+            status: f.status,
+          };
+        }),
+      );
+
+      const res = await fetch("/api/admin/fitur", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: dataToSend }),
+      });
+
+      const result = await res.json();
+      if (!res.ok) {
+        setSaveMessage(result.message || "Gagal menyimpan");
+        return;
+      }
+
+      setSaveMessage("Data berhasil disimpan");
+      await loadFitur();
+    } catch (e: any) {
+      setSaveMessage(e?.message || "Terjadi kesalahan pada server");
+    }
+  };
 
   return (
     <div className="p-6 relative">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Kelola Fitur</h1>
-        <button
-          onClick={() => {
-            console.log(data);
-          }}
-          className="bg-blue-600 text-white px-6 py-2 rounded sticky top-6"
-        >
-          Simpan
-        </button>{" "}
-      </div>
+      <AlertMessage message={saveMessage} />
+      <h1 className="text-lg sm:text-2xl font-bold mb-6">Kelola Fitur</h1>
 
       <DndContext
         sensors={sensors}
@@ -85,15 +139,21 @@ export default function AdminFitur() {
         onDragEnd={onDragEnd}
       >
         <SortableContext
-          items={data.map((i) => i.id)}
+          items={data.map((i) => i.uiId)}
           strategy={rectSortingStrategy}
         >
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-fr">
-            {data.map((item, index) => (
+            {data.map((item) => (
               <SortableItem
-                key={item.id}
+                key={item.uiId}
                 item={item}
-                no={index + 1}
+                onToggle={(uiId: string) => {
+                  setData((prev) =>
+                    prev.map((i) =>
+                      i.uiId === uiId ? { ...i, status: !i.status } : i,
+                    ),
+                  );
+                }}
                 onContext={(e: any) =>
                   setContext({
                     x: e.clientX,
@@ -108,15 +168,23 @@ export default function AdminFitur() {
               onClick={() =>
                 setModal({ id: null, ikon: "", nama: "", deskripsi: "" })
               }
-              className="flex flex-col items-center justify-center border-2 border-dashed rounded text-gray-500 h-full"
+              className="border-2 border-dashed rounded-lg flex flex-col items-center justify-center h-48 w-full text-gray-500"
             >
-              <div className="text-4xl">+</div>
-              <span className="text-sm">Tambah Fitur</span>
+              <div className="text-4xl leading-none">+</div>
+              <span className="text-sm mt-2">Tambah Fitur</span>
             </button>
           </div>
         </SortableContext>
       </DndContext>
 
+      <div className="sticky top-4 mt-4 sm:mt-6">
+        <button
+          onClick={saveAllFitur}
+          className="w-full bg-green-600 text-white rounded py-3 px-4 sm:px-6 md:px-8"
+        >
+          Simpan
+        </button>
+      </div>
       {context && (
         <>
           <div
@@ -155,13 +223,25 @@ export default function AdminFitur() {
         <FiturModal
           data={modal}
           onClose={() => setModal(null)}
-          onSave={(item: any) => {
+          onSave={(item) => {
             setData((prev) => {
-              if (item.id) {
-                return prev.map((i) => (i.id === item.id ? item : i));
+              if (item.uiId) {
+                return prev.map((i) =>
+                  i.uiId === item.uiId ? { ...i, ...item } : i,
+                );
               }
-              return [...prev, { ...item, id: crypto.randomUUID() }];
+
+              return [
+                ...prev,
+                {
+                  ...item,
+                  id: null,
+                  status: true,
+                  uiId: crypto.randomUUID(),
+                },
+              ];
             });
+
             setModal(null);
           }}
         />
@@ -170,62 +250,61 @@ export default function AdminFitur() {
   );
 }
 
-function SortableItem({ item, no, onContext }: any) {
+function SortableItem({ item, onContext, onToggle }: any) {
   const { setNodeRef, attributes, listeners, transform, transition } =
-    useSortable({ id: item.id });
+    useSortable({ id: item.uiId });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
   };
 
-  const [active, setActive] = useState(false);
-
   return (
     <div
       ref={setNodeRef}
       style={style}
       {...attributes}
-      className="relative bg-[#D9D9D9] rounded p-4 h-48 select-none"
+      className="relative bg-white rounded-lg p-4 h-48 select-none shadow-md hover:shadow-lg transition-shadow"
     >
+      {/* Drag handle */}
+      <div {...listeners} className="absolute inset-0 cursor-grab" />
+
       {/* Toggle */}
-      <div className="absolute top-3 right-3">
+      <div className="absolute top-3 right-3 z-10">
         <label className="inline-flex items-center cursor-pointer">
           <input
             type="checkbox"
             className="sr-only"
-            checked={active}
-            onChange={() => setActive(!active)}
+            checked={item.status}
+            onChange={() => onToggle(item.uiId)}
           />
           <div
             className={`w-10 h-5 rounded-full relative transition-colors ${
-              active ? "bg-green-500" : "bg-gray-300"
+              item.status ? "bg-green-500" : "bg-gray-300"
             }`}
           >
             <div
               className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${
-                active ? "translate-x-5" : "translate-x-0"
+                item.status ? "translate-x-5" : "translate-x-0"
               }`}
             />
           </div>
         </label>
       </div>
 
-      <div
-        {...listeners}
-        className="flex flex-col items-center justify-center h-full gap-2 cursor-grab"
-      >
+      {/* Content */}
+      <div className="flex flex-col items-center justify-center h-full gap-2 pointer-events-none">
         <img src={item.ikon} className="w-16 h-16 object-contain" />
         <span className="font-medium text-sm text-center">{item.nama}</span>
       </div>
 
-      {/* titik tiga */}
+      {/* Context menu */}
       <button
         onClick={(e) => {
           e.stopPropagation();
           onContext(e);
         }}
-        className="absolute bottom-3 right-3 w-8 h-8 flex items-center justify-center rounded hover:bg-black/10"
+        className="absolute bottom-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded hover:bg-black/10"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -239,3 +318,15 @@ function SortableItem({ item, no, onContext }: any) {
     </div>
   );
 }
+
+const parseStatus = (v: any) => {
+  if (v === true) return true;
+  if (v === false) return false;
+  if (v === "true") return true;
+  if (v === "false") return false;
+  if (v === "t") return true;
+  if (v === "f") return false;
+  if (v === 1) return true;
+  if (v === 0) return false;
+  return true;
+};
