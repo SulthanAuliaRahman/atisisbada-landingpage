@@ -223,7 +223,7 @@ export default function AdminFitur() {
         <FiturModal
           data={modal}
           onClose={() => setModal(null)}
-          onSave={(item) => {
+          onSave={(item: { uiId?: string; [key: string]: any }) => {
             setData((prev) => {
               if (item.uiId) {
                 return prev.map((i) =>
