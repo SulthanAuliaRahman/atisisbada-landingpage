@@ -1,9 +1,11 @@
-"use server"
 import LandingCarousel from "@/app/(public)/LandingCarousel";
 import LandingModule from "@/app/(public)/LandingModule";
 import LandingFaqs from "@/app/(public)/LandingFAQs";
-
 import prisma from "@/lib/prisma";
+
+// karena public jadi  bukan force-dynamic
+// ini jadi update static content (yang di public) dengan cepat karena gak nge rebuild
+export const revalidate = 60; // second
 
 type CarouselSlide = {
   id: string;

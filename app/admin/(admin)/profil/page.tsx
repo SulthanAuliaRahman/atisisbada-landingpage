@@ -3,6 +3,8 @@ import LandingCarousel from "@/app/(public)/LandingCarousel";
 import CarouselTabel from "./CarouselTabel";
 import CarouselModal from "./CarouselModal";
 
+export const dynamic = "force-dynamic"; // agar admin page nya selalu sinkron dengan DB
+
 export default async function AdminProfil() {
   const slides = await prisma.homeCarousel.findMany({
     orderBy: { nomor_urut: "asc" },
