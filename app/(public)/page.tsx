@@ -1,15 +1,53 @@
+"use server"
 import LandingCarousel from "@/app/(public)/LandingCarousel";
 import LandingModule from "@/app/(public)/LandingModule";
 import LandingFaqs from "@/app/(public)/LandingFAQs";
 
+import prisma from "@/lib/prisma";
+
+type CarouselSlide = {
+  id: string;
+  nomor_urut: number;
+  alt:string;
+  url: string;
+};
+
 
 // this is landing page
-export default function LandingPage() {
+export default async function LandingPage() {
+  //fetch carousel slide
+    const slides: CarouselSlide[] = (
+    await prisma.homeCarousel.findMany({
+      where: { status: true },
+      orderBy: { nomor_urut: "asc" },
+      select: {
+        id: true,
+        alt:true,
+        nomor_urut: true,
+        url: true,
+      },
+    })
+  ).filter(
+    (slides): slides is CarouselSlide => slides.nomor_urut !== null
+  );
+
+
   return (
     <div className=" bg-white overflow-x-hidden">
       {/* per-section */}
       <main>
-        <LandingCarousel/>
+        <LandingCarousel
+          slides={
+            slides.length > 0 ? slides : [
+                  {
+                    id: "default",
+                    nomor_urut: 1,
+                    alt:"Carousel_Image",
+                    url: "/carousel/4_keunggulan_atisisbada.png", 
+                  },
+                ]
+          }
+        />
         <LandingModule/>
         <LandingFaqs/>
       </main>
