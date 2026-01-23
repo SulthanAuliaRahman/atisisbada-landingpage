@@ -1,35 +1,46 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextResponse,NextRequest } from "next/server";
 
-type Params = {
-  params: { id: string };
-};
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const body = await request.json();
 
-export async function PUT(req: Request, { params }: Params) {
-  const { id } = await params;
+    if (!id) {
+      return NextResponse.json(
+        { message: "Missing id param" },
+        { status: 400 }
+      );
+    }
 
-  const body = await req.json();
-  console.log("PUT body:", body);
+    if (!body.alt) {
+      return NextResponse.json(
+        { message: "alt is required" },
+        { status: 400 }
+      );
+    }
 
+    const slide = await prisma.homeCarousel.update({
+      where: { id },
+      data: {
+        nomor_urut: Number(body.nomor_urut),
+        alt: body.alt,
+        status: Boolean(body.status),
+        updated_at: new Date(),
+      },
+    });
 
-  if (!body.alt) {
+    return NextResponse.json(slide);
+  } catch (error) {
+    console.error("PUT /profile/[id] error:", error);
     return NextResponse.json(
-      { message: "alt is required" },
-      { status: 400 }
+      { message: "Internal Server Error" },
+      { status: 500 }
     );
   }
-
-  const slide = await prisma.homeCarousel.update({
-    where: { id: id },
-    data: {
-      nomor_urut: body.nomor_urut,
-      alt: body.alt,
-      status: body.status,
-      updated_at: new Date(),
-    },
-  });
-
-  return NextResponse.json(slide);
 }
 
 

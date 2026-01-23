@@ -2,13 +2,36 @@
 
 //route: /admin masuk ke login page
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "@/lib/auth-client";
+import { signIn,useSession } from "@/lib/auth-client";
 
 export default function LogInPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const { data: session, isPending } = useSession();
+
+  useEffect(() => {
+      if (!isPending && session?.user) {
+        router.replace("/admin/dashboard");
+      }
+    }, [isPending, session, router]);
+  
+    if (isPending) {
+      return (
+        <p className="text-center mt-8">
+          Loading...
+        </p>
+      );
+    }
+  
+    if (session?.user) {
+      return (
+        <p className="text-center mt-8">
+          Redirecting...
+        </p>
+      );
+    }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
