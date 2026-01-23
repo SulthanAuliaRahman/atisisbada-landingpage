@@ -6,41 +6,23 @@ import Image from "next/image";
 type CarouselSlide = {
   id: string;
   nomor_urut: number;
+  alt:string;
   url: string;
 };
 
-const slides: CarouselSlide[] = [
-  {
-    id: "1",
-    nomor_urut: 1,
-    url: "/carousel/4_keunggulan_atisisbada.png",
-  },
-  {
-    id: "2",
-    nomor_urut: 2,
-    url: "/carousel/fungsi_utama_atisisbada.png",
-  },
-  {
-    id: "3",
-    nomor_urut: 3,
-    url: "/carousel/kenapa_atisisbada_dibutuhkan.png",
-  },
-].sort((firstSlide, secondSlide) => {
-  return firstSlide.nomor_urut - secondSlide.nomor_urut;
-});
-
-
-export default function LandingCarousel() {
+export default function LandingCarousel({
+  slides,
+}: {
+  slides: CarouselSlide[];
+}) {
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
 
   const total = slides.length;
-
   const next = () => setCurrent((i) => (i + 1) % total);
 
   useEffect(() => {
     if (paused || total <= 1) return;
-
     const id = setInterval(next, 5000);
     return () => clearInterval(id);
   }, [paused, total]);
@@ -60,7 +42,7 @@ export default function LandingCarousel() {
             <div key={slide.id} className="relative min-w-full h-full">
               <Image
                 src={slide.url}
-                alt={"Carousel image"}
+                alt={slide.alt ? slide.alt :"Carousel Image"}
                 fill
                 priority={i === 0}
                 className="object-cover"
