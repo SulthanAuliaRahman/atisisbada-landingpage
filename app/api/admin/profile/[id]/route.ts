@@ -1,5 +1,12 @@
 import prisma from "@/lib/prisma";
-import { NextResponse,NextRequest } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
+import fs from "fs";
+import path from "path";
+
+const STORAGE_DIR =
+  process.env.NODE_ENV === "development"
+    ? path.join(process.cwd(), "public", "carousel")
+    : "/var/www/storage/carousel";
 
 export async function PUT(
   request: NextRequest,
@@ -35,7 +42,7 @@ export async function PUT(
 
     return NextResponse.json(slide);
   } catch (error) {
-    console.error("PUT /profile/[id] error:", error);
+    console.error("PUT /api/admin/profile/[id] error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
@@ -43,37 +50,39 @@ export async function PUT(
   }
 }
 
-
-//note: Delete ini tidak menghapus di filesystem nya (jadi soft delete)
-// ini katanya karena next js servere files pada /public itu jadi static assets (jadi bisa ke lock di server nya)
-// jadi  delete file di /public tidak selalu jalan di next dev (katanya...)
-// yaa karena small admin site harus nya aman aman aja
 export async function DELETE(
   _: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
   try {
+    const { id } = await params;
+
     const slide = await prisma.homeCarousel.findUnique({
       where: { id },
     });
 
     if (!slide) {
-      return NextResponse.json({ message: "Not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Not found" },
+        { status: 404 }
+      );
     }
 
-    await prisma.homeCarousel.delete({
-      where: { id },
-    });
+    const filename = path.basename(slide.url);
+    const filepath = path.join(STORAGE_DIR, filename);
+
+    if (fs.existsSync(filepath)) {
+      fs.unlinkSync(filepath);
+    }
+
+    await prisma.homeCarousel.delete({ where: { id } });
 
     return NextResponse.json({ message: "Deleted" });
   } catch (error) {
-    console.error("DELETE carousel failed:", error);
+    console.error("DELETE /api/admin/profile/[id] error:", error);
     return NextResponse.json(
-      { message: "Internal server error" },
+      { message: "Internal Server Error" },
       { status: 500 }
     );
   }
 }
-
-
