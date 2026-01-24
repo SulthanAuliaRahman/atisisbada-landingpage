@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 
 type CarouselSlide = {
   id: string;
@@ -40,13 +39,12 @@ export default function LandingCarousel({
         >
           {slides.map((slide, i) => (
             <div key={slide.id} className="relative min-w-full h-full">
-              <Image
-                src={slide.url}
-                alt={slide.alt ? slide.alt :"Carousel Image"}
-                fill
-                priority={i === 0}
-                className="object-cover"
-              />
+                 {/*  Karena Dynamic Image jadi Tidak Pakai Nextjs Image itu soalnya akan ke "public/" */}
+                <img
+                  src={slide.url}
+                  alt={slide.alt || "Carousel Image"}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
             </div>
           ))}
         </div>
