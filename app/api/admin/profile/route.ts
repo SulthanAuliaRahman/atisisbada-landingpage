@@ -11,8 +11,7 @@ const STORAGE_DIR =
 
 const PUBLIC_URL_PREFIX =
   process.env.NODE_ENV === "development"
-    ? "/carousel"
-    : "/storage/carousel";
+    ? "/carousel" : "https://dev-atis-landingpage.atisisbada.id/carousel";
 
 export async function POST(req: Request) {
   try {
