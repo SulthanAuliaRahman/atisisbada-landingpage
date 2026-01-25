@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import LandingModule from "@/app/(public)/LandingModule";
-import LandingFaqs from "@/app/(public)/LandingFAQs";
+import LandingFAQsWrapper from "@/components/server/LandingFAQs.server";
 
 type Fitur = {
   id: string;
@@ -136,8 +136,8 @@ const FiturPage = () => {
         </div>
       </div>
 
-      <LandingModule />
-      <LandingFaqs />
+      <LandingModule />{/* Ini juga nanti gitu rest  */}
+      {/* <LandingFAQsWrapper/>  Ini Harus Server Components soal nya ini di wrapping jadi fetching juga biar gak error urg di comment kan dulu  */}
     </div>
   );
 };

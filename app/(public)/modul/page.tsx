@@ -1,8 +1,12 @@
+import LandingFAQsWrapper from '@/components/server/LandingFAQs.server'
 import React from 'react'
 
 const ModulPage = () => {
   return (
-    <div>ModulPage</div>
+    <div>
+      ModulPage
+      <LandingFAQsWrapper/>
+    </div>
   )
 }
 

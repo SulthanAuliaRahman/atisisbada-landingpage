@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import FAQItem from "./FAQItem";
 
 export interface FAQ {
-  id: number;
+  id: string;
   pertanyaan: string;
   jawaban: string;
 }

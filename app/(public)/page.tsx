@@ -1,11 +1,13 @@
 import LandingCarousel from "@/app/(public)/LandingCarousel";
 import LandingModule from "@/app/(public)/LandingModule";
-import LandingFaqs from "@/app/(public)/LandingFAQs";
 import prisma from "@/lib/prisma";
+import LandingFAQsWrapper from "../../components/server/LandingFAQs.server";
 
 // karena public jadi  bukan force-dynamic
 // ini jadi update static content (yang di public) dengan cepat karena gak nge rebuild
 export const revalidate = 60; // second
+
+//TODO Refactor Carousel Slide using Wrapper for the server nanti
 
 type CarouselSlide = {
   id: string;
@@ -51,7 +53,7 @@ export default async function LandingPage() {
           }
         />
         <LandingModule/>
-        <LandingFaqs/>
+        <LandingFAQsWrapper/>
       </main>
       
     </div>

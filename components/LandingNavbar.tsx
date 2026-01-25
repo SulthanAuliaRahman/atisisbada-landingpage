@@ -9,7 +9,7 @@ const navItems = [
   { name: "Fitur",      href: "/fitur" },
   { name: "Modul",      href: "/modul" },
   { name: "Mitra",      href: "/mitra" },
-  { name: "Portofolio", href: "/portofolio" },
+  { name: "Publikasi",  href: "/publikasi" },
 ];
 
 const LandingNavbar = () => {
