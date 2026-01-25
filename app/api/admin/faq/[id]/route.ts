@@ -5,9 +5,10 @@ type Params = {
   params: { id: string };
 };
 
-export async function PUT(req: NextRequest, { params }: Params) {
+export async function PUT(request: NextRequest, 
+  { params }: { params: Promise<{ id: string }>} ) { // TODO Find Out why Chat GPT doesnt like this shit so much wtf man??
   const {id} = await params;
-  const body = await req.json();
+  const body = await request.json();
 
   if (!id) {
       return NextResponse.json(
@@ -30,7 +31,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
   return NextResponse.json(faq);
 }
 
-export async function DELETE(_: NextRequest, { params }: Params) {
+export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
 
   const {id} = await params;
 
