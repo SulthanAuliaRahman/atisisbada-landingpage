@@ -21,8 +21,7 @@ export default async function AdminProfil() {
 
   const nextOrder =
     slides.length > 0
-      ? Math.max(...slides.map((s) => s.nomor_urut ?? 0)) + 1
-      : 1;
+      ? Math.max(...slides.map((slide) => slide.nomor_urut ?? 0)) + 1 : 1;
 
   return (
     <div className="p-6 space-y-6">

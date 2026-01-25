@@ -13,9 +13,9 @@ const PUBLIC_URL_PREFIX =
   process.env.NODE_ENV === "development"
     ? "/carousel" : "https://dev-atis-landingpage.atisisbada.id/carousel";
 
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
-    const formData = await req.formData();
+    const formData = await request.formData();
 
     const file = formData.get("image") as File | null;
     const nama = formData.get("nama") as string | null;

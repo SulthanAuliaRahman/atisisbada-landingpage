@@ -4,9 +4,7 @@ import fs from "fs";
 import path from "path";
 
 const STORAGE_DIR =
-  process.env.NODE_ENV === "development"
-    ? path.join(process.cwd(), "public", "carousel")
-    : "/var/www/storage/carousel";
+  process.env.NODE_ENV === "development" ? path.join(process.cwd(), "public", "carousel") : "/var/www/storage/carousel";
 
 export async function PUT(
   request: NextRequest,

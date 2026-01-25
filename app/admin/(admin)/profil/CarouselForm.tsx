@@ -24,8 +24,8 @@ export default function CarouselForm({
   const [status, setStatus] = useState(initialData?.status ?? true);
   const [loading, setLoading] = useState(false);
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const submit = async (event: React.FormEvent) => {
+    event.preventDefault();
     setLoading(true);
 
     let response: Response;
@@ -108,7 +108,7 @@ export default function CarouselForm({
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                onChange={(event) => setFile(event.target.files?.[0] ?? null)}
               />
             </label>
           </div>
@@ -120,7 +120,7 @@ export default function CarouselForm({
           <input
             placeholder="Alternative text & Nama Carousel"
             value={alt}
-            onChange={(e) => setAlt(e.target.value)}
+            onChange={(event) => setAlt(event.target.value)}
             className="w-full border px-3 py-2 rounded"
           />
         </>
@@ -134,7 +134,7 @@ export default function CarouselForm({
           <input
             placeholder="Alternative text & Nama Carousel"
             value={alt}
-            onChange={(e) => setAlt(e.target.value)}
+            onChange={(event) => setAlt(event.target.value)}
             className="w-full border px-3 py-2 rounded"
           />
         </div>
@@ -145,7 +145,7 @@ export default function CarouselForm({
       <input
         type="number"
         value={nomorUrut}
-        onChange={(e) => setNomorUrut(Number(e.target.value))}
+        onChange={(event) => setNomorUrut(Number(event.target.value))}
         className="w-full border px-3 py-2 rounded"
       />
 
@@ -153,7 +153,7 @@ export default function CarouselForm({
         <input
           type="checkbox"
           checked={status}
-          onChange={(e) => setStatus(e.target.checked)}
+          onChange={(event) => setStatus(event.target.checked)}
         />
         Active
       </label>

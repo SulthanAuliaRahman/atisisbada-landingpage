@@ -127,7 +127,7 @@ const AdminFooter = () => {
   return (
     <div className="flex flex-col gap-6 p-6 w-full bg-background min-h-screen">
       <AlertMessage message={saveMessage} />
-      <h1 className="text-lg sm:text-2xl font-bold">Kelola FooteFooterr</h1>
+      <h1 className="text-lg sm:text-2xl font-bold">Kelola Footer</h1>
       {/* Form Panel - Grid 2 Kolom */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Data Kantor */}
