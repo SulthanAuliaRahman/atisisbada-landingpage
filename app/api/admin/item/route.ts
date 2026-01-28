@@ -139,32 +139,39 @@ export async function POST(req: Request) {
   return NextResponse.json({ message: "Semua fitur berhasil disimpan" });
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const data = await prisma.$queryRaw<
-      Array<{
-        id: string;
-        urutan: number;
-        ikon: string | null;
-        nama: string;
-        deskripsi: string;
-        status: boolean;
-      }>
-    >`
-      SELECT *
-      FROM fitur
-      ORDER BY status DESC, urutan ASC
-    `;
+    const { searchParams } = new URL(req.url);
+    const type = searchParams.get("type");
 
-    const result = data.map((f) => ({
-      ...f,
-      ikon: f.ikon ? `/fitur/${f.ikon}` : null,
+    const data = await prisma.item.findMany({
+      where: type ? { type } : undefined,
+      orderBy: [{ status: "desc" }, { urutan: "asc" }],
+    });
+
+    const iconPathMap: Record<string, string> = {
+      FITUR: "fitur",
+      MODUL: "modul",
+      MITRA: "mitra",
+    };
+
+    const result = data.map((i) => ({
+      ...i,
+      ikon:
+        i.ikon && iconPathMap[i.type]
+          ? `/${iconPathMap[i.type]}/${i.ikon}`
+          : null,
     }));
 
     return NextResponse.json({ data: result });
-  } catch {
+  } catch (error) {
+    console.error("GET /api/admin/item error:", error);
+
     return NextResponse.json(
-      { message: "Gagal ambil data fitur" },
+      {
+        message: "Gagal ambil data item",
+        error: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }

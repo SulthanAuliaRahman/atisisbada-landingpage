@@ -1,14 +1,6 @@
-import LandingFAQsWrapper from '@/components/server/LandingFAQs.server'
-import React from 'react'
+import ItemPage from "@/components/page/ItemPage";
 
-export const revalidate = 10; // second
-
-const MitraPage = () => {
-  return (
-    <div>MitraPage
-      <LandingFAQsWrapper/>
-    </div>
-  )
+export default function Page() {
+  return <ItemPage type="MITRA" />;
 }
 
-export default MitraPage

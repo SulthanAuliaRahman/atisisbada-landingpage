@@ -143,16 +143,17 @@ updated_at DateTime?
 @@map("berita")
 }
 
-model Fitur {
+model Item {
 id String @id @default(uuid())
 urutan Int
 ikon String
 nama String
-deskripsi String
+deskripsi String @db.Text
 status Boolean @default(true)
+type String
 
 created_at DateTime @default(now())
 updated_at DateTime @updatedAt
-@@map("fitur")
+@@map("item")
 
 }
