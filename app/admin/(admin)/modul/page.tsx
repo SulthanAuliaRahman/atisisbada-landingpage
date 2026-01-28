@@ -1,9 +1,14 @@
-import React from 'react'
+import ItemManager from "@/components/admin/ItemManager";
+import { ItemManagerConfig } from "@/components/admin/ItemManager/types";
 
-const AdminModul = () => {
-  return (
-    <div>AdminModul</div>
-  )
+export default function Page() {
+  const config: ItemManagerConfig = {
+    type: "modul",
+    title: "Kelola Modul",
+    apiEndpoint: "/api/admin/item",
+    addButtonText: "Tambah Modul",
+  };
+
+  return <ItemManager config={config} />;
 }
 
-export default AdminModul

@@ -7,14 +7,6 @@ import {
   extractWhatsAppNumber,
 } from "@/app/utils/ExtractLink";
 
-export const dynamic = "force-dynamic";
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 export async function POST(req: Request) {
   const formData = await req.formData();
   const logoFile = formData.get("logo") as File | null;

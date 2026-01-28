@@ -5,147 +5,173 @@ import prisma from "@/lib/prisma";
 
 export async function POST(req: Request) {
   let body: any;
+
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ message: "JSON tidak valid" }, { status: 400 });
   }
+
   if (!body.data || !Array.isArray(body.data)) {
     return NextResponse.json(
-      { message: "Data harus berupa array fitur" },
+      { message: "Data harus berupa array" },
       { status: 400 },
     );
   }
+
+  const type = body.type;
+  if (!["FITUR", "MODUL", "MITRA"].includes(type)) {
+    return NextResponse.json({ message: "Type tidak valid" }, { status: 400 });
+  }
+
   const errors: Record<number, Record<string, string>> = {};
   const isDev = process.env.NODE_ENV === "development";
   const UPLOAD_DIR = isDev
-    ? path.join(process.cwd(), "public", "fitur")
-    : "/var/www/storage/fitur";
-  if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+    ? path.join(process.cwd(), "public", type.toLowerCase())
+    : `/var/www/storage/${type.toLowerCase()}`;
+
+  if (!fs.existsSync(UPLOAD_DIR)) {
+    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+  }
+
   const processedData: any[] = [];
 
   for (let i = 0; i < body.data.length; i++) {
     const f = body.data[i];
     const fieldErrors: Record<string, string> = {};
+
     if (!f.nama?.trim()) fieldErrors.nama = "Nama wajib diisi";
     if (!f.deskripsi?.trim()) fieldErrors.deskripsi = "Deskripsi wajib diisi";
     if (!f.ikon?.trim()) fieldErrors.ikon = "Ikon wajib diisi";
-    if (Object.keys(fieldErrors).length > 0) {
+
+    if (Object.keys(fieldErrors).length) {
       errors[i] = fieldErrors;
       continue;
     }
+
     let ikonFileName = f.ikon;
+    let ikonChanged = false;
 
     if (f.ikon.startsWith("data:image/")) {
       const matches = f.ikon.match(
-        /^data:image\/([a-zA-Z0-9\+\-]+);base64,(.+)$/,
+        /^data:image\/([a-zA-Z0-9+.-]+);base64,(.+)$/,
       );
+
       if (!matches) {
         errors[i] = { ikon: "Format ikon tidak valid" };
         continue;
       }
-      let ext = matches[1] === "svg+xml" ? "svg" : matches[1];
+
+      const ext = matches[1] === "svg+xml" ? "svg" : matches[1];
       if (!["png", "jpg", "jpeg", "svg"].includes(ext)) {
-        errors[i] = { ikon: "Hanya PNG, JPG, JPEG, SVG" };
+        errors[i] = { ikon: "Ekstensi tidak didukung" };
         continue;
       }
+
       const buffer = Buffer.from(matches[2], "base64");
       const fileName = `${Date.now()}-${i}.${ext}`;
       fs.writeFileSync(path.join(UPLOAD_DIR, fileName), buffer);
+
       ikonFileName = fileName;
+      ikonChanged = true;
     } else {
-      ikonFileName = f.ikon.replace(/^\/fitur\//, "");
+      ikonFileName = path.basename(f.ikon);
     }
 
     processedData.push({
-      ...f,
+      id: f.id,
+      nama: f.nama,
+      deskripsi: f.deskripsi,
       ikon: ikonFileName,
+      status: Boolean(f.status),
       urutan: i + 1,
+      type,
+      ikonChanged,
     });
   }
 
-  if (Object.keys(errors).length > 0) {
+  if (Object.keys(errors).length) {
     return NextResponse.json(
       { message: "Validasi gagal", errors },
       { status: 400 },
     );
   }
 
-  const dbFitur = await prisma.$queryRawUnsafe<
-    { id: string; ikon: string | null }[]
-  >(`SELECT id, ikon FROM fitur`);
+  const existing = await prisma.item.findMany({
+    where: { type },
+    select: { id: true, ikon: true },
+  });
 
-  const dbIds = dbFitur.map((f) => f.id);
-  const reqIds = processedData.filter((f) => f.id).map((f) => f.id);
-  const idsToDelete = dbIds.filter((id) => !reqIds.includes(id));
+  const existingMap = new Map(existing.map((i) => [i.id, i.ikon]));
+  const incomingIds = processedData.filter((i) => i.id).map((i) => i.id);
 
-  if (idsToDelete.length > 0) {
-    const fiturToDelete = dbFitur.filter((f) => idsToDelete.includes(f.id));
-    for (const f of fiturToDelete) {
-      if (f.ikon) {
-        const filePath = path.join(UPLOAD_DIR, f.ikon);
-        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-      }
+  const toDelete = existing.filter((i) => !incomingIds.includes(i.id));
+
+  for (const i of toDelete) {
+    if (i.ikon) {
+      const filePath = path.join(UPLOAD_DIR, i.ikon);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
     }
-    await prisma.$executeRawUnsafe(
-      `DELETE FROM fitur WHERE id IN (${idsToDelete.map((id) => `'${id}'`).join(",")})`,
-    );
   }
 
-  const ikonMap = new Map(dbFitur.map((f) => [f.id, f.ikon]));
+  await prisma.item.deleteMany({
+    where: {
+      type,
+      id: { notIn: incomingIds },
+    },
+  });
 
   for (const f of processedData) {
     if (f.id) {
-      const ikonLama = ikonMap.get(f.id);
+      const oldIcon = existingMap.get(f.id);
 
-      if (
-        ikonLama &&
-        ikonLama !== f.ikon &&
-        body.data
-          .find((d: any) => d.id === f.id)
-          ?.ikon?.startsWith("data:image/")
-      ) {
-        const filePath = path.join(UPLOAD_DIR, ikonLama);
+      if (f.ikonChanged && oldIcon && oldIcon !== f.ikon) {
+        const filePath = path.join(UPLOAD_DIR, oldIcon);
         if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
       }
 
-      const nama = f.nama.replace(/'/g, "''");
-      const deskripsi = f.deskripsi.replace(/'/g, "''");
-      const ikon = f.ikon.replace(/'/g, "''");
-
-      await prisma.$executeRawUnsafe(`
-        UPDATE fitur
-        SET
-          nama='${nama}',
-          deskripsi='${deskripsi}',
-          ikon='${ikon}',
-          urutan=${f.urutan},
-          status=${f.status},
-          updated_at=NOW()
-        WHERE id='${f.id}'
-      `);
+      await prisma.item.update({
+        where: { id: f.id },
+        data: {
+          nama: f.nama,
+          deskripsi: f.deskripsi,
+          ikon: f.ikon,
+          urutan: f.urutan,
+          status: f.status,
+        },
+      });
     } else {
-      const nama = f.nama.replace(/'/g, "''");
-      const deskripsi = f.deskripsi.replace(/'/g, "''");
-      const ikon = f.ikon.replace(/'/g, "''");
-
-      await prisma.$executeRawUnsafe(`
-        INSERT INTO fitur (id, urutan, nama, deskripsi, ikon, status, created_at, updated_at)
-        VALUES (gen_random_uuid(), ${f.urutan}, '${nama}', '${deskripsi}', '${ikon}', ${f.status}, NOW(), NOW())
-      `);
+      await prisma.item.create({
+        data: {
+          nama: f.nama,
+          deskripsi: f.deskripsi,
+          ikon: f.ikon,
+          urutan: f.urutan,
+          status: f.status,
+          type,
+        },
+      });
     }
   }
 
-  return NextResponse.json({ message: "Semua fitur berhasil disimpan" });
+  return NextResponse.json({ message: "Data berhasil disimpan" });
 }
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const type = searchParams.get("type");
+    const statusParam = searchParams.get("status");
+
+    let status: boolean | undefined = undefined;
+    if (statusParam === "true") status = true;
+    if (statusParam === "false") status = false;
 
     const data = await prisma.item.findMany({
-      where: type ? { type } : undefined,
+      where: {
+        ...(type ? { type } : {}),
+        ...(status !== undefined ? { status } : {}),
+      },
       orderBy: [{ status: "desc" }, { urutan: "asc" }],
     });
 

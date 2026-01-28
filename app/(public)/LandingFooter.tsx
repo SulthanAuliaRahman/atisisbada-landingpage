@@ -84,7 +84,7 @@ const LandingFooter = () => {
               >
                 <img
                   src="/Instagram.png"
-                  className="h-10 w-auto"
+                  className="h-15 w-auto"
                   alt="Instagram"
                 />
               </a>
@@ -99,7 +99,7 @@ const LandingFooter = () => {
               >
                 <img
                   src="/Whatsapp.png"
-                  className="h-10 w-auto"
+                  className="h-15 w-auto"
                   alt="Whatsapp"
                 />
               </a>

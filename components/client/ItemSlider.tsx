@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Item } from "@lib/type/Item";
+import { Item } from "@/lib/type/Item";
 
 type Props = {
   data: Item[];
