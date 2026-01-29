@@ -11,12 +11,16 @@ const AdminDashboard = async () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-xl font-bold">FAQ Management</h1>
-        <FAQModal triggerLabel="Tambah FAQ" />
-      </div>
+      {/* FAQs Section */}
+      <div>
+        <div className="flex justify-between items-center py-4">
+          <h1 className="text-xl font-bold">FAQ Management</h1>
+          <FAQModal triggerLabel="Tambah FAQ" />
+        </div>
 
       <FAQsTable faqs={faqs} />
+      </div>
+
     </div>
   );
 };

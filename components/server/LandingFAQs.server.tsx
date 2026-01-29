@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import LandingFaqs from "../UI/LandingFAQs";
 
-export const revalidate = 60;
+export const revalidate = 30;
 
 export default async function LandingFAQsWrapper() {
   const faqs = await prisma.faq.findMany({

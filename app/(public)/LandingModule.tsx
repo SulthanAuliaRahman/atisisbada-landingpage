@@ -16,16 +16,6 @@ type LandingSection = {
 
 const landingSections: readonly LandingSection[] = [
   {
-    id: "profile",
-    cards: [
-      {
-        icon: "user",
-        header: "Profile",
-        content: ["Video Profile"],
-      },
-    ],
-  },
-  {
     id: "feature",
     cards: [
       {

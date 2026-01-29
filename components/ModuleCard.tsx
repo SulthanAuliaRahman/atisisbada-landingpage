@@ -38,7 +38,7 @@ const ModuleCard: React.FC<ModuleCardProps> = ({
   const visibleItems = isOpen ? content : content.slice(0, 4);
 
   return (
-    <div className="w-70 rounded-xl bg-card ">  {/* <div className="w-80 rounded-xl border border-card-border bg-card shadow-sm"></div> Temporary*/}
+    <div className="w-80 rounded-xl border border-card-border bg-card shadow-sm">
       <button 
         onClick={() => setIsOpen((prev) => !prev)}
         className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-3 px-5 py-4"

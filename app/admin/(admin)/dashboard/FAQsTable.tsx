@@ -13,66 +13,101 @@ type Props = {
 
 const FAQsTable = ({ faqs }: Props) => {
   return (
-    <div className="bg-background border rounded-xl shadow-sm">
-      <div className="px-6 py-4 border-b">
-        <h2 className="text-sm font-semibold uppercase">FAQ List</h2>
-      </div>
+    <div className="bg-background border border-foreground rounded-xl shadow-sm overflow-hidden">
 
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
+        <table className="min-w-full divide-y divide-foreground text-sm">
+          <thead className="bg-background">
             <tr>
-              <th className="px-4 py-3 text-left">Pertanyaan</th>
-              <th className="px-4 py-3 text-left">Jawaban</th>
-              <th className="px-4 py-3 text-left">Aksi</th>
+              <th scope="col" className="w-10 px-4 py-3.5 text-left font-semibold text-foreground">
+                No
+              </th>
+              <th scope="col" className="w-5/12 px-4 py-3.5 text-left font-semibold text-foreground">
+                Pertanyaan
+              </th>
+              <th scope="col" className="w-5/12 px-4 py-3.5 text-left font-semibold text-foreground">
+                Jawaban
+              </th>
+              <th scope="col" className="w-2/12 px-4 py-3.5 text-left font-semibold text-foreground">
+                Aksi
+              </th>
             </tr>
           </thead>
 
-          <tbody className="divide-y">
-            {faqs.length === 0 && (
+          <tbody className="divide-y divide-foreground  bg-background">
+            {faqs.length === 0 ? (
               <tr>
-                <td colSpan={3} className="px-4 py-6 text-center text-gray-500">
-                  Tidak ada FAQ
-                </td>
-              </tr>
-            )}
-
-            {faqs.map((faq) => (
-              <tr key={faq.id} className="hover:bg-gray-500">
-                <td className="px-4 py-3 font-medium">
-                  {faq.pertanyaan}
-                </td>
-
-                <td className="px-4 py-3 text-foreground">
-                  {faq.jawaban}
-                </td>
-
-                <td className="px-4 py-3">
-                  <div className="flex gap-2">
-                    <FAQModal
-                      triggerLabel="Edit"
-                      initialData={faq}
-                    />
-
-                    <button
-                      onClick={async () => {
-                        if (!confirm("Hapus FAQ ini?")) return;
-                        await fetch(`/api/admin/faq/${faq.id}`, {
-                          method: "DELETE",
-                        });
-                        window.location.reload();
-                      }}
-                      className="text-red-600 bg-red-100 rounded-full px-2 py-0.5"
-                    >
-                      Delete
-                    </button>
+                <td colSpan={4} className="px-6 py-12 text-center text-foreground">
+                  <div className="flex flex-col items-center gap-2">
+                    <p className="text-base font-medium">Belum ada FAQ</p>
+                    <p className="text-sm">Tambahkan FAQ baru dengan tombol di atas</p>
                   </div>
                 </td>
               </tr>
-            ))}
+            ) : (
+              faqs.map((faq, index) => (
+                <tr
+                  key={faq.id}
+                  className="group hover:bg-blue-300/60 transition-colors"
+                >
+                  <td className="whitespace-nowrap px-4 py-4 text-foreground">
+                    {index + 1}
+                  </td>
+
+                  <td className="px-4 py-4 font-medium text-foreground">
+                    {faq.pertanyaan}
+                  </td>
+
+                  <td className="px-4 py-4 text-foreground max-w-md">
+                    <div className="line-clamp-2">
+                      {faq.jawaban}
+                    </div>
+                  </td>
+
+                  <td className="whitespace-nowrap px-4 py-4">
+                    <div className="flex items-center gap-3">
+                      <FAQModal
+                        triggerLabel="Edit"
+                        initialData={faq}
+                      />
+
+                      <button
+                        onClick={async () => {
+                          if (!confirm("Yakin ingin menghapus FAQ ini?")) return;
+
+                          try {
+                            const res = await fetch(`/api/admin/faq/${faq.id}`, {
+                              method: "DELETE",
+                            });
+
+                            if (res.ok) {
+                              window.location.reload();
+                            } else {
+                              alert("Gagal menghapus FAQ");
+                            }
+                          } catch (err) {
+                            alert("Terjadi kesalahan");
+                          }
+                        }}
+                        className="text-red-600 bg-red-100 rounded-full px-2 py-0.5"
+                      >
+                        Hapus
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
+
+      {/* Optional footer with count */}
+      {faqs.length > 0 && (
+        <div className="px-6 py-3 text-xs text-foreground bg-background border-t">
+          Menampilkan {faqs.length} pertanyaan
+        </div>
+      )}
     </div>
   );
 };

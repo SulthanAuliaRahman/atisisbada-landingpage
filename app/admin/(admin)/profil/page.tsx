@@ -25,31 +25,32 @@ export default async function AdminProfil() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-xl font-bold">Landing Carousel</h1>
+      <div className="space-y-3">
+        <div className="flex justify-between items-center py-4">
+          <h1 className="text-xl font-bold">Landing Carousel</h1>
+          {/* Modal Trigger Pop up form*/}
+          <CarouselModal triggerLabel="Tambah Carousel" nextOrder={nextOrder} />
+        </div>
 
-      {/* Modal Trigger Pop up form*/}
-      <CarouselModal
-        triggerLabel="Tambah Carousel"
-        nextOrder={nextOrder}
-      />
+        {/* Table */}
+        <CarouselTabel slides={slides} />
 
-      {/* Table */}
-      <CarouselTabel slides={slides} />
-
-      {/* Preview */}
-      <LandingCarousel
-        slides={
-          previewSlides.length > 0 ? previewSlides 
-          : [
-              {
-                id: "default",
-                nomor_urut: 1,
-                alt:"Carousel Default Image",
-                url: "/carousel/4_keunggulan_atisisbada.png",
-              },
-            ]
-        }
-      />
+        {/* Preview */}
+        <LandingCarousel
+          slides={
+            previewSlides.length > 0
+              ? previewSlides
+              : [
+                  {
+                    id: "default",
+                    nomor_urut: 1,
+                    alt: "Carousel Default Image",
+                    url: "/carousel/4_keunggulan_atisisbada.png",
+                  },
+                ]
+          }
+        />
+      </div>
     </div>
   );
 }

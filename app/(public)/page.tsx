@@ -5,7 +5,7 @@ import LandingFAQsWrapper from "../../components/server/LandingFAQs.server";
 
 // karena public jadi  bukan force-dynamic
 // ini jadi update static content (yang di public) dengan cepat karena gak nge rebuild
-export const revalidate = 10; // second
+export const revalidate = 30; // second
 
 //TODO Refactor Carousel Slide using Wrapper for the server nanti
 

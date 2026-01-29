@@ -39,9 +39,9 @@ export default function CarouselModal({
             onClick={() => setOpen(false)}
           />
 
-          <div className="relative bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
+          <div className="relative bg-background border-white rounded-lg shadow-lg w-full max-w-lg p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg text-black font-semibold">
+              <h2 className="text-lg text-foreground font-semibold">
                 {initialData?.id ? "Edit Carousel" : "Tambah Carousel"}
               </h2>
               <button onClick={() => setOpen(false)}>✕</button>
