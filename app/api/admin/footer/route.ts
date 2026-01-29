@@ -51,11 +51,8 @@ export async function POST(req: Request) {
     );
   }
 
-  const isDev = process.env.NODE_ENV === "development";
-
-  const UPLOAD_DIR = isDev
-    ? path.join(process.cwd(), "public")
-    : "/var/www/storage";
+  const UPLOAD_DIR =
+    process.env.STORAGE_PATH || path.join(process.cwd(), "public");
 
   const LOGO_PATH = path.join(UPLOAD_DIR, "logo.png");
 

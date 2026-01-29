@@ -37,18 +37,19 @@ export default function ItemModal({
     });
   };
 
+  const labels = {
+    fitur: "Fitur",
+    modul: "Modul",
+    mitra: "Mitra",
+  };
+
   const getTitle = () => {
-    const labels = {
-      fitur: "Fitur",
-      modul: "Modul",
-      mitra: "Mitra",
-    };
     return data.id ? `Edit ${labels[type]}` : `Tambah ${labels[type]}`;
   };
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white w-full max-w-xl p-8 rounded">
+      <div className="bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto p-10 rounded">
         <h2 className="text-2xl font-bold mb-6">{getTitle()}</h2>
 
         <div className="flex flex-col gap-6">
@@ -84,7 +85,7 @@ export default function ItemModal({
               value={form.nama}
               onChange={(e) => setForm({ ...form, nama: e.target.value })}
               className="w-full border p-2 rounded"
-              placeholder="Nama item"
+              placeholder={`Nama ${labels[type]}`}
             />
           </div>
 
@@ -94,7 +95,7 @@ export default function ItemModal({
               value={form.deskripsi}
               onChange={(e) => setForm({ ...form, deskripsi: e.target.value })}
               className="w-full border p-2 rounded min-h-[120px]"
-              placeholder="Deskripsi item"
+              placeholder={`Deskripsi ${labels[type]}`}
             />
           </div>
         </div>
