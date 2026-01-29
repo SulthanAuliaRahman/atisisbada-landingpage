@@ -14,13 +14,22 @@ const FAQItem: React.FC<FAQItemProps> = ({
   onToggle,
 }) => {
   return (
-    <div className="border border-border-colour bg-card rounded-full px-6 py-4 flex flex-col">
+    <div className="rounded-xl md:rounded-2xl border border-border/60 bg-card overflow-hidden">
+      {/* Header */}
       <button
         onClick={onToggle}
         aria-expanded={isOpen}
-        className="flex w-full items-center justify-between text-left"
+        className={`
+          flex w-full items-center justify-between
+          px-5 py-4 md:px-6 md:py-5  
+          text-left font-medium text-foreground
+          transition-colors border border-border/30
+        `}
       >
-        <span className="font-medium text-foreground text-sm md:text-base">
+
+        
+
+        <span className="font-medium text-foreground text-base md:text-lg leading-tight ">
           {pertanyaan}
         </span>
 
@@ -41,11 +50,19 @@ const FAQItem: React.FC<FAQItemProps> = ({
         </span>
       </button>
 
-      {isOpen && (
-        <div className="mt-4 text-sm text-foreground leading-relaxed px-1">
-          {jawaban}
+      {/* Jawaban */}
+      <div
+        className={`
+          grid transition-all duration-300 ease-in-out
+          ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}
+        `}
+      >
+        <div className="overflow-hidden bg-blue-200/60">
+          <div className="border-t border-border/40 px-6 py-4 text-sm text-muted-foreground leading-relaxed">
+            {jawaban}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
