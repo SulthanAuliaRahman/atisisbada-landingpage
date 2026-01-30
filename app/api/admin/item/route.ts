@@ -144,9 +144,11 @@ export async function POST(req: Request) {
     });
   }
 
-  if (Object.keys(errors).length) {
-    const firstItem = errors[Object.keys(errors)[0]];
-    const firstMessage = firstItem[Object.keys(firstItem)[0]];
+  const errorValues = Object.values(errors);
+
+  if (errorValues.length > 0) {
+    const firstItem = errorValues[0];
+    const firstMessage = Object.values(firstItem)[0];
 
     return NextResponse.json({ message: firstMessage }, { status: 400 });
   }
