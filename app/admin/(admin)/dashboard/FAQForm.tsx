@@ -5,12 +5,18 @@ import { FAQPayload } from "./FAQModal";
 
 type Props = {
   initialData?: FAQPayload;
+  nextOrder?: number;
   onSuccess: () => void;
 };
 
-const FAQForm = ({ initialData, onSuccess }: Props) => {
+const FAQForm = ({ initialData, nextOrder, onSuccess }: Props) => {
   const [pertanyaan, setPertanyaan] = useState(initialData?.pertanyaan ?? "");
   const [jawaban, setJawaban] = useState(initialData?.jawaban ?? "");
+  const [nomorUrut, setNomorUrut] = useState(
+    initialData?.nomor_urut ?? nextOrder ?? 1,
+  );
+  const [status, setStatus] = useState(initialData?.status ?? true);
+
   const [loading, setLoading] = useState(false);
 
   const isEdit = Boolean(initialData?.id);
@@ -24,8 +30,13 @@ const FAQForm = ({ initialData, onSuccess }: Props) => {
       {
         method: isEdit ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pertanyaan, jawaban }),
-      }
+        body: JSON.stringify({
+          pertanyaan,
+          jawaban,
+          nomor_urut: nomorUrut,
+          status,
+        }),
+      },
     );
 
     setLoading(false);
@@ -40,6 +51,18 @@ const FAQForm = ({ initialData, onSuccess }: Props) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium">Nomor Urut</label>
+        <input
+          type="number"
+          value={nomorUrut}
+          onChange={(e) => setNomorUrut(parseInt(e.target.value) || 1)}
+          className="w-full border rounded px-3 py-2"
+          min="1"
+          required
+        />
+      </div>
+
       <div>
         <label className="block text-sm font-medium">Pertanyaan</label>
         <input
@@ -61,10 +84,20 @@ const FAQForm = ({ initialData, onSuccess }: Props) => {
         />
       </div>
 
-      <button
-        disabled={loading}
-        className="regular-button w-full py-2"
-      >
+      <div className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          id="status"
+          checked={status}
+          onChange={(e) => setStatus(e.target.checked)}
+          className="w-4 h-4"
+        />
+        <label htmlFor="status" className="text-sm font-medium">
+          Aktif
+        </label>
+      </div>
+
+      <button disabled={loading} className="regular-button w-full py-2">
         {loading ? "Menyimpan..." : isEdit ? "Update FAQ" : "Tambah FAQ"}
       </button>
     </form>

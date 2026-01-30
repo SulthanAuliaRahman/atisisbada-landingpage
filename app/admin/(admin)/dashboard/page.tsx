@@ -6,8 +6,12 @@ export const dynamic = "force-dynamic";
 
 const AdminDashboard = async () => {
   const faqs = await prisma.faq.findMany({
-    orderBy: { created_at: "desc" },
+    orderBy: { nomor_urut: "asc" },
   });
+
+    const nextOrder =
+    faqs.length > 0
+      ? Math.max(...faqs.map((faq) => faq.nomor_urut ?? 0)) + 1 : 1;
 
   return (
     <div className="p-6 space-y-6">
@@ -15,7 +19,7 @@ const AdminDashboard = async () => {
       <div>
         <div className="flex justify-between items-center py-4">
           <h1 className="text-xl font-bold">FAQ Management</h1>
-          <FAQModal triggerLabel="Tambah FAQ" />
+          <FAQModal triggerLabel="Tambah FAQ" nextOrder={nextOrder}  />
         </div>
 
       <FAQsTable faqs={faqs} />

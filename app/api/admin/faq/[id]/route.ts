@@ -6,24 +6,26 @@ type Params = {
 };
 
 export async function PUT(request: NextRequest, 
-  { params }: { params: Promise<{ id: string }>} ) { // TODO Find Out why Chat GPT doesnt like this shit so much wtf man??
+  { params }: { params: Promise<{ id: string }>} ) {
   const {id} = await params;
   const body = await request.json();
 
   if (!id) {
-      return NextResponse.json(
-        { message: "Missing id param" },
-        { status: 400 }
-      );
-    }
+    return NextResponse.json(
+      { message: "Missing id param" },
+      { status: 400 }
+    );
+  }
   
-  const { pertanyaan, jawaban } = body;
+  const { pertanyaan, jawaban, nomor_urut, status } = body;
 
   const faq = await prisma.faq.update({
     where: { id },
     data: {
       pertanyaan,
       jawaban,
+      nomor_urut,
+      status,
       updated_at: new Date(),
     },
   });

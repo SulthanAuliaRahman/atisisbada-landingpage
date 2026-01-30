@@ -11,7 +11,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { pertanyaan, jawaban } = body;
+  const { pertanyaan, jawaban, nomor_urut, status } = body;
 
   if (!pertanyaan || !jawaban) {
     return NextResponse.json(
@@ -24,6 +24,8 @@ export async function POST(req: NextRequest) {
     data: {
       pertanyaan,
       jawaban,
+      nomor_urut: nomor_urut ?? null,
+      status: status ?? true,
       created_at: new Date(),
     },
   });

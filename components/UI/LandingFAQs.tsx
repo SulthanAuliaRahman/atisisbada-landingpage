@@ -73,7 +73,7 @@ const LandingFaqs: React.FC<Props> = ({ faqs }) => {
               </a>
             </div>
           </div>
-
+        
         </div>
       </div>
     </section>

@@ -6,15 +6,18 @@ import FAQForm from "./FAQForm";
 export type FAQPayload = {
   id?: string;
   pertanyaan?: string;
+  nomor_urut: number | null;
   jawaban?: string;
+  status?: boolean;
 };
 
 type Props = {
   triggerLabel: string;
   initialData?: FAQPayload;
+  nextOrder?: number;
 };
 
-export default function FAQModal({ triggerLabel, initialData }: Props) {
+export default function FAQModal({ triggerLabel, initialData,nextOrder }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -43,6 +46,7 @@ export default function FAQModal({ triggerLabel, initialData }: Props) {
 
             <FAQForm
               initialData={initialData}
+              nextOrder={nextOrder}
               onSuccess={() => {
                 setOpen(false);
                 window.location.reload();
