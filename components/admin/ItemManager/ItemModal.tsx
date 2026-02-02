@@ -16,12 +16,19 @@ export default function ItemModal({
     ikon: data.ikon || "",
   });
 
+  const [usedImages, setUsedImages] = useState<string[]>([]);
   const [preview, setPreview] = useState(data.ikon || "");
   const [file, setFile] = useState<File | null>(null);
 
   const quillRef = useRef<any>(null);
   const [quillReady, setQuillReady] = useState(false);
 
+  const getImagesFromHtml = (html: string) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return Array.from(doc.querySelectorAll("img"))
+      .map((img) => img.getAttribute("src"))
+      .filter((src): src is string => !!src && src.includes("/temp/"));
+  };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
@@ -52,9 +59,46 @@ export default function ItemModal({
     data.id ? `Edit ${labels[type]}` : `Tambah ${labels[type]}`;
 
   useEffect(() => {
+    return () => {
+      if (quillRef.current) {
+        quillRef.current.off("text-change");
+        quillRef.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    setQuillReady(false);
+
+    setForm({
+      nama: data.nama || "",
+      deskripsi: data.deskripsi || "",
+      ikon: data.ikon || "",
+    });
+
+    setPreview(data.ikon || "");
+    setFile(null);
+    setUsedImages([]);
+
+    setTimeout(() => {
+      if ((window as any).Quill) {
+        setQuillReady(true);
+      }
+    }, 0);
+  }, [data]);
+
+  useEffect(() => {
     if (!quillReady) return;
-    if (quillRef.current) return;
     if (!(window as any).Quill) return;
+
+    if (quillRef.current) {
+      quillRef.current.off("text-change");
+      const editorContainer = document.querySelector("#quill-editor");
+      if (editorContainer) {
+        editorContainer.innerHTML = "";
+      }
+      quillRef.current = null;
+    }
 
     const Quill = (window as any).Quill;
 
@@ -65,22 +109,14 @@ export default function ItemModal({
           container: [
             [{ font: [] }],
             [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
             ["bold", "italic", "underline", "strike"],
-
             [{ color: [] }, { background: [] }],
-
             [{ script: "sub" }, { script: "super" }],
-
             [{ list: "ordered" }, { list: "bullet" }],
             [{ indent: "-1" }, { indent: "+1" }],
-
             [{ align: [] }],
-
             ["blockquote", "code-block"],
-
             ["link", "image", "video"],
-
             ["clean"],
           ],
           handlers: {
@@ -96,7 +132,7 @@ export default function ItemModal({
                 const formData = new FormData();
                 formData.append("file", file);
 
-                const res = await fetch("/api/upload/image", {
+                const res = await fetch("/api/admin/item/image", {
                   method: "POST",
                   body: formData,
                 });
@@ -104,6 +140,8 @@ export default function ItemModal({
                 const { url } = await res.json();
 
                 const range = quill.getSelection();
+                if (!range) return;
+
                 quill.insertEmbed(range.index, "image", url);
               };
 
@@ -114,19 +152,14 @@ export default function ItemModal({
       },
     });
 
-    if (form.deskripsi) {
-      quill.root.innerHTML = form.deskripsi;
-    }
+    quill.clipboard.dangerouslyPasteHTML(form.deskripsi || "");
 
     quill.on("text-change", () => {
-      setForm((prev) => ({
-        ...prev,
-        deskripsi: quill.root.innerHTML,
-      }));
+      setForm((p) => ({ ...p, deskripsi: quill.root.innerHTML }));
     });
 
     quillRef.current = quill;
-  }, [quillReady]);
+  }, [quillReady, data.id, data.uiId]);
 
   return (
     <>

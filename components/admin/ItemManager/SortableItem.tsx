@@ -20,7 +20,7 @@ export default function SortableItem({
       ref={setNodeRef}
       style={style}
       {...attributes}
-      className="relative bg-white rounded-lg p-4 h-48 select-none shadow-md hover:shadow-lg transition-shadow"
+      className="relative bg-card rounded-lg p-4 h-48 select-none shadow-md hover:shadow-lg transition-shadow"
     >
       {/* Drag handle */}
       <div {...listeners} className="absolute inset-0 cursor-grab" />

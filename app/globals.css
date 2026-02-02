@@ -16,7 +16,7 @@
     --button-foreground: 210 40% 98%;
     --footer: #002947;
 
-    --card: 210 40% 98%; /* white  Probably Changed back to  0 0% 100%; */ 
+    --card: 210 40% 98%; /* white  Probably Changed back to  0 0% 100%; */
     --card-border: 220 13% 91%; /* light gray border */
   }
 
@@ -95,4 +95,67 @@
   font-size: 0.875rem;
   line-height: 1.6;
   text-align: justify;
+}
+
+.dark .ql-toolbar {
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--card-border));
+}
+
+.dark .ql-container {
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--card-border));
+}
+
+.dark .ql-editor {
+  color: hsl(var(--foreground));
+}
+
+.dark .ql-editor.ql-blank::before {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.dark .ql-picker {
+  color: hsl(var(--foreground));
+}
+
+.dark .ql-picker-options {
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--card-border));
+}
+
+.dark .ql-stroke {
+  stroke: hsl(var(--foreground));
+}
+
+.dark .ql-fill {
+  fill: hsl(var(--foreground));
+}
+
+.dark .ql-tooltip {
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--card-border));
+  color: hsl(var(--foreground));
+}
+
+.dark .ql-toolbar .ql-stroke {
+  stroke: hsl(var(--foreground));
+  opacity: 0.55;
+}
+
+.dark .ql-toolbar .ql-fill {
+  fill: hsl(var(--foreground));
+  opacity: 0.55;
+}
+
+.dark .ql-toolbar button:hover .ql-stroke,
+.dark .ql-toolbar button:hover .ql-fill,
+.dark .ql-toolbar button.ql-active .ql-stroke,
+.dark .ql-toolbar button.ql-active .ql-fill {
+  opacity: 0.8;
+}
+
+.dark .ql-toolbar button:hover,
+.dark .ql-toolbar button.ql-active {
+  background-color: hsl(var(--card-border));
 }

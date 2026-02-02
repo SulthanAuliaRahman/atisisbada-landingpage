@@ -211,7 +211,7 @@ export default function ItemManager({ config }: ItemManagerProps) {
           />
 
           <div
-            className="fixed bg-white border rounded shadow z-50"
+            className="fixed bg-card border rounded shadow z-50"
             style={{ top: context.y, left: context.x }}
           >
             <button
@@ -219,7 +219,7 @@ export default function ItemManager({ config }: ItemManagerProps) {
                 setModal(context.item);
                 setContext(null);
               }}
-              className="block px-4 py-2 text-sm w-full text-left hover:bg-gray-100"
+              className="block px-4 py-2 text-sm w-full text-left hover:bg-card-border transition-colors"
             >
               Edit
             </button>
@@ -229,7 +229,7 @@ export default function ItemManager({ config }: ItemManagerProps) {
                 setData((prev) => prev.filter((i) => i.id !== context.item.id));
                 setContext(null);
               }}
-              className="block px-4 py-2 text-sm w-full text-left hover:bg-gray-100 text-red-600"
+              className="block px-4 py-2 text-sm w-full text-left text-red-500 hover:bg-card-border"
             >
               Hapus
             </button>
@@ -239,10 +239,11 @@ export default function ItemManager({ config }: ItemManagerProps) {
 
       {modal && (
         <ItemModal
+          key={modal.uiId || modal.id || "new"}
           data={modal}
           onClose={() => setModal(null)}
           type={config.type}
-          onSave={(item: Partial<BaseItem>) => {
+          onSave={(item) => {
             setData((prev) => {
               if (item.uiId) {
                 return prev.map((i) =>
@@ -253,7 +254,7 @@ export default function ItemManager({ config }: ItemManagerProps) {
               return [
                 ...prev,
                 {
-                  ...(item as BaseItem),
+                  ...(item as any),
                   id: null,
                   status: true,
                   uiId: crypto.randomUUID(),
