@@ -108,7 +108,7 @@ id String @id @default(uuid())
 pertanyaan String @db.VarChar(255)
 jawaban String @db.VarChar(255)
 nomor_urut Int?
-status Boolean
+status Boolean @default(false)
 created_at DateTime?
 updated_at DateTime?
 
@@ -140,6 +140,7 @@ nomor_urut Int?
 nama String @db.VarChar(255)
 deskripsi String @db.VarChar(255)
 url String @db.VarChar(255)
+status Boolean @default(false)
 created_at DateTime?
 updated_at DateTime?
 @@map("berita")

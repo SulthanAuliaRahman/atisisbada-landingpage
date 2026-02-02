@@ -10,7 +10,7 @@ export const adminNavItems = [
   { name: "Fitur", href: "/admin/fitur", icon: Layers },
   { name: "Modul", href: "/admin/modul", icon: Package },
   { name: "Mitra", href: "/admin/mitra", icon: Users },
-  { name: "Portofolio", href: "/admin/portofolio", icon: Settings },
+  { name: "Berita", href: "/admin/berita", icon: Settings },
   { name: "Carousel", href: "/admin/profil", icon: Settings },
   { name: "pengaturan", href: "/admin/pengaturan", icon: Users },
   { name: "Footer", href: "/admin/footer", icon: Settings },
