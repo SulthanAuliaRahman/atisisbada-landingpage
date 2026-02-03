@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Item } from "@/lib/type/Item";
+import Link from "next/link";
 
 type Props = {
   data: Item[];
@@ -32,25 +33,26 @@ const ItemSlider = ({ data = [], title }: Props) => {
   const totalSlide = data.length ? Math.ceil(data.length / itemsPerSlide) : 1;
 
   return (
-    <div className="bg-[#D9D9D9] px-6 py-20 min-h-[420px]">
+    <div className="relative min-h-[420px] lg:h-[745px] px-6 py-15 bg-item-bg overflow-hidden text-white">
+      {" "}
+      <div className="pointer-events-none absolute -top-32 -right-32 w-70 h-70 bg-white/30 rounded-full blur-3xl" />{" "}
+      <div className="pointer-events-none absolute -bottom-32 -left-32 w-70 h-70 bg-white/25 rounded-full blur-3xl" />
       <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-8">
         {title}
       </h2>
-
       <div className="flex justify-center gap-2 mt-6">
         {Array.from({ length: totalSlide }).map((_, i) => (
           <div
             key={i}
-            className={`h-1 rounded-full bg-[#0489D4] ${i === slide ? "w-10" : "w-4"}`}
+            className={`h-1 rounded-full bg-[#045E92] mb-10 ${i === slide ? "w-10" : "w-4"}`}
           />
         ))}
       </div>
-
       <div className="relative">
         {slide > 0 && (
           <button
             onClick={() => setSlide(slide - 1)}
-            className="absolute left-0 top-1/2 text-4xl"
+            className="absolute -left-2 top-1/2 z-20 text-4xl"
           >
             ‹
           </button>
@@ -59,13 +61,13 @@ const ItemSlider = ({ data = [], title }: Props) => {
         {slide < totalSlide - 1 && (
           <button
             onClick={() => setSlide(slide + 1)}
-            className="absolute right-0 top-1/2 text-4xl"
+            className="absolute -right-2 top-1/2 z-20 text-4xl"
           >
             ›
           </button>
         )}
 
-        <div className="overflow-hidden min-h-[260px]">
+        <div className="overflow-hidden min-h-[260px] relative z-10">
           <div
             className="flex transition-transform duration-300"
             style={{
@@ -87,17 +89,19 @@ const ItemSlider = ({ data = [], title }: Props) => {
                 >
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 min-h-[220px]">
                     {slideData.map((item) => (
-                      <div
+                      <Link
                         key={item.id}
-                        className="flex flex-col items-center gap-3"
+                        href={`/${item.type.toLowerCase()}/${item.id}`}
                       >
-                        <img
-                          src={item.ikon}
-                          alt={item.nama}
-                          className="w-16 h-16"
-                        />
-                        <span>{item.nama}</span>
-                      </div>
+                        <div className="flex flex-col items-center gap-3 p-10 rounded-lg cursor-pointer transition-colors hover:bg-[#045E92] hover:shadow-md">
+                          <img
+                            src={item.ikon}
+                            alt={item.nama}
+                            className="w-30 h-30 mb-6"
+                          />
+                          <span>{item.nama}</span>
+                        </div>
+                      </Link>
                     ))}
                   </div>
                 </div>
