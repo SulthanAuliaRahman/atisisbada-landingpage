@@ -1,7 +1,19 @@
-import React from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import ModuleCard from "@/components/ModuleCard";
 
 type IconName = "user" | "setting" | "boxes" | "handshake";
+
+type Item = {
+  id: string;
+  urutan: number;
+  ikon: IconName;
+  nama: string;
+  deskripsi: string;
+  status: boolean;
+  type: "FITUR" | "MODUL" | "MITRA";
+};
 
 type LandingCard = {
   icon: IconName;
@@ -9,65 +21,49 @@ type LandingCard = {
   content: readonly string[];
 };
 
-type LandingSection = {
-  id: string;
-  cards: readonly LandingCard[];
-};
-
-const landingSections: readonly LandingSection[] = [
-  {
-    id: "feature",
-    cards: [
-      {
-        icon: "setting",
-        header: "Feature",
-        content: [
-          "Input Foto",
-          "Integrasi Pelaporan",
-          "Penatausahaan",
-          "Chatting",
-        ],
-      },
-    ],
-  },
-  {
-    id: "module",
-    cards: [
-      {
-        icon: "boxes",
-        header: "Modul",
-        content: [
-          "Administrasi Sistem",
-          "Penerimaan Pengadaan Barang",
-          "Penatausahaan",
-          "Pemanfaatan Barang",
-          "Penghapusan Barang",
-          "Pelaporan",
-        ],
-      },
-    ],
-  },
-  {
-    id: "mitra",
-    cards: [
-      {
-        icon: "handshake",
-        header: "Mitra",
-        content: ["Kabupaten Bogor", "Kabupaten Kuningan"],
-      },
-    ],
-  },
-] as const;
-
 const LandingModule = () => {
-  const allCards = landingSections.flatMap((section) => section.cards);
+  const [cards, setCards] = useState<LandingCard[]>([]);
+
+  useEffect(() => {
+    const load = async () => {
+      const res = await fetch("/api/admin/item?status=true");
+      const json = await res.json();
+
+      const data: Item[] = json.data;
+
+      const aktif = data.sort((a, b) => a.urutan - b.urutan);
+
+      const fitur = aktif.filter((i) => i.type === "FITUR");
+      const modul = aktif.filter((i) => i.type === "MODUL");
+      const mitra = aktif.filter((i) => i.type === "MITRA");
+
+      setCards([
+        {
+          icon: "setting",
+          header: "Feature",
+          content: fitur.map((i) => i.nama),
+        },
+        {
+          icon: "boxes",
+          header: "Modul",
+          content: modul.map((i) => i.nama),
+        },
+        {
+          icon: "handshake",
+          header: "Mitra",
+          content: mitra.map((i) => i.nama),
+        },
+      ]);
+    };
+
+    load();
+  }, []);
 
   return (
     <section className="py-12 bg-background">
       <div className="container mx-auto px-4">
-        <div
-          className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-12 justify-items-center">
-          {allCards.map((card, index) => (
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-12 justify-items-center">
+          {cards.map((card, index) => (
             <ModuleCard
               key={index}
               icon={card.icon}

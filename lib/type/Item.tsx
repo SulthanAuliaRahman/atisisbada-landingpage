@@ -3,6 +3,7 @@ export type Item = {
   ikon: string;
   nama: string;
   deskripsi: string;
+  type: string;
   urutan: number;
   status: boolean;
 };

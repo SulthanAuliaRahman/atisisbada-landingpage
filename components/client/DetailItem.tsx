@@ -11,7 +11,7 @@ const DetailItem = ({ id }: Props) => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const descRef = useRef(null);
+  const descRef = useRef<HTMLDivElement | null>(null);
   const [svgHeight, setSvgHeight] = useState(800);
 
   useEffect(() => {
