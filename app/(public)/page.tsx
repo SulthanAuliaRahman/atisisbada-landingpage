@@ -2,6 +2,7 @@ import LandingCarousel from "@/app/(public)/LandingCarousel";
 import LandingModule from "@/app/(public)/LandingModule";
 import prisma from "@/lib/prisma";
 import LandingFAQsWrapper from "../../components/server/LandingFAQs.server";
+import InstagramSection from "@/components/server/InstagramSection.server";
 
 // karena public jadi  bukan force-dynamic
 // ini jadi update static content (yang di public) dengan cepat karena gak nge rebuild
@@ -53,6 +54,7 @@ export default async function LandingPage() {
           }
         />
         <LandingModule/>
+        <InstagramSection/>
         <LandingFAQsWrapper/>
       </main>
       

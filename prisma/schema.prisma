@@ -161,3 +161,15 @@ model Item {
   @@unique([type, nama])
   @@map("item")
 }
+
+model Instagram{
+  id String @id @default(uuid())
+  url String @db.VarChar(255)
+  nama String @db.VarChar(255)
+  deskripsi String @db.VarChar(255)
+  nomor_urut Int?
+  status Boolean @default(false)
+  created_at DateTime?
+  updated_at DateTime? 
+
+}

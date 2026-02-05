@@ -21,7 +21,7 @@ const DesktopNav = ({ navItems, onCtaClick }: DesktopNavProps) => {
   return (
     <>
       {/* Logo */}
-      <Link href="#" className="flex items-center gap-2 font-bold text-xl">
+      <Link href="/" className="flex items-center gap-2 font-bold text-xl">
         <Image
           src="/logo-navbar.png"
           alt="Atisisbada Logo"
@@ -32,7 +32,7 @@ const DesktopNav = ({ navItems, onCtaClick }: DesktopNavProps) => {
       </Link>
 
       {/* Desktop Menu */}
-      <ul className="hidden md:flex items-center gap-8">
+      <ul className="hidden md:flex items-center gap-24">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
 

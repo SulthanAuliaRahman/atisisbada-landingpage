@@ -5,11 +5,11 @@ import DesktopNav from "./DesktopNavbar";
 import MobileNav from "./MobileNavbar";
 
 const navItems = [
-  { name: "Profil",     href: "/" },
-  { name: "Fitur",      href: "/fitur" },
-  { name: "Modul",      href: "/modul" },
-  { name: "Mitra",      href: "/mitra" },
-  { name: "Publikasi",  href: "/publikasi" },
+  { name: "Home",     href: "/" },
+  { name: "Fitur",    href: "/fitur" },
+  { name: "Modul",    href: "/modul" },
+  { name: "Mitra",    href: "/mitra" },
+  { name: "Profil",   href: "/profil" },
 ];
 
 const LandingNavbar = () => {
