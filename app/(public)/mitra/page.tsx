@@ -1,6 +1,15 @@
 import ItemPage from "@/components/page/ItemPage";
+import InstagramSection from "@/components/server/InstagramSection.server";
+import LandingFAQsWrapper from "@/components/server/LandingFAQs.server";
 
 export default function Page() {
-  return <ItemPage type="MITRA" />;
+  return (
+    <div>
+      <ItemPage type="MITRA" />
+      <InstagramSection/>
+      <LandingFAQsWrapper/>
+    </div>
+  );
 }
+
 

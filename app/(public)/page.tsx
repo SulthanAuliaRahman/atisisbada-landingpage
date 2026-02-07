@@ -38,7 +38,7 @@ export default async function LandingPage() {
 
 
   return (
-    <div className=" bg-white overflow-x-hidden">
+    <div className=" bg-backgrounnd overflow-x-hidden">
       {/* per-section */}
       <main>
         <LandingCarousel

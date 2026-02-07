@@ -25,9 +25,7 @@ const FAQItem: React.FC<FAQItemProps> = ({
           text-left font-medium text-foreground
           transition-colors border border-border/30
         `}
-      >
-
-        
+      > 
 
         <span className="font-medium text-foreground text-base md:text-lg leading-tight ">
           {pertanyaan}
@@ -53,8 +51,10 @@ const FAQItem: React.FC<FAQItemProps> = ({
       {/* Jawaban */}
       <div
         className={`
-          grid transition-all duration-300 ease-in-out
-          ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}
+          overflow-hidden
+          transition-[max-height,opacity]
+          duration-300 ease-in-out
+          ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}
         `}
       >
         <div className="overflow-hidden bg-blue-200/60">

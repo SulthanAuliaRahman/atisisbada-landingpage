@@ -6,21 +6,6 @@ type InstagramPost = {
   caption?: string
 }
 
-async function getInstagramEmbed(url: string): Promise<string | null> {
-  try {
-    const oembedUrl = `https://graph.facebook.com/v20.0/instagram_oembed?url=${encodeURIComponent(url)}`
-    const res = await fetch(oembedUrl, { next: { revalidate: 3600 } }) // cache 1 hour
-
-    if (!res.ok) return null
-
-    const data = await res.json()
-    return data.html || null
-  } catch (err) {
-    console.error('Failed to fetch Instagram oEmbed:', err)
-    return null
-  }
-}
-
 
 export default async function InstagramSection() {
   const instagramData = await prisma.instagram.findMany({

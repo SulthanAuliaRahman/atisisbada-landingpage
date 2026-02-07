@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 type CarouselSlide = {
   id: string;
   nomor_urut: number;
-  alt:string;
+  alt: string;
   url: string;
 };
 
@@ -28,38 +28,40 @@ export default function LandingCarousel({
 
   return (
     <section
-      className="relative w-full overflow-hidden"
+      className="relative w-full py-0 bg-background"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className="relative aspect-[16/9] lg:aspect-[21/9]">
-        <div
-          className="flex h-full transition-transform duration-700 ease-in-out"
-          style={{ transform: `translateX(-${current * 100}%)` }}
-        >
-          {slides.map((slide, i) => (
-            <div key={slide.id} className="relative min-w-full h-full">
-                 {/*  Karena Dynamic Image jadi Tidak Pakai Nextjs Image itu soalnya akan ke "public/" */}
+      {/* Container that centers the carousel and limits max width */}
+      <div className="mx-auto w-full max-w">
+        <div className="relative aspect-[21/9] lg:aspect-[21/8] max-h-[740px] lg:max-h-[860px] xl:max-h-[940px] mx-auto">
+          <div
+            className="flex h-full transition-transform duration-700 ease-in-out"
+            style={{ transform: `translateX(-${current * 100}%)` }}
+          >
+            {slides.map((slide, i) => (
+              <div key={slide.id} className="relative min-w-full h-full">
                 <img
                   src={slide.url}
                   alt={slide.alt || "Carousel Image"}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
-            </div>
-          ))}
-        </div>
+              </div>
+            ))}
+          </div>
 
-        {/* Indicators */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-          {slides.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrent(i)}
-              className={`h-2 w-2 rounded-full transition ${
-                i === current ? "bg-white" : "bg-white/40"
-              }`}
-            />
-          ))}
+          {/* Indicators */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2.5 z-10">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                className={`h-3 w-3 rounded-full transition-all ${
+                  i === current ? "bg-white scale-125 shadow-md" : "bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
