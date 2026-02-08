@@ -14,33 +14,39 @@ const FAQItem: React.FC<FAQItemProps> = ({
   onToggle,
 }) => {
   return (
-    <div className="rounded-xl md:rounded-2xl border border-border/60 bg-card overflow-hidden">
-      {/* Header */}
+    <div
+      className={`
+        rounded-xl border border-border/60 bg-card
+        overflow-hidden transition
+        hover:border-primary hover:bg-muted
+      `}
+    >
       <button
         onClick={onToggle}
         aria-expanded={isOpen}
-        className={`
+        className="
           flex w-full items-center justify-between
-          px-5 py-4 md:px-6 md:py-5  
-          text-left font-medium text-foreground
-          transition-colors border border-border/30
-        `}
-      > 
-
-        <span className="font-medium text-foreground text-base md:text-lg leading-tight ">
+          px-6 py-3.5
+          text-left transition-colors
+        "
+      >
+        <span className="text-base font-medium text-foreground pr-4">
           {pertanyaan}
         </span>
 
         <span
-          className={`flex items-center justify-center w-8 h-8 rounded-full bg-primary transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`
+            flex items-center justify-center
+            w-7 h-7 rounded-full bg-primary/10 text-primary
+            transition-transform duration-200 flex-shrink-0
+            ${isOpen ? "rotate-180" : ""}
+          `}
         >
           <svg
-            className="w-4 h-4 text-foregrounde"
+            className="w-5 h-5"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="2.5"
             viewBox="0 0 24 24"
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -51,16 +57,13 @@ const FAQItem: React.FC<FAQItemProps> = ({
       {/* Jawaban */}
       <div
         className={`
-          overflow-hidden
           transition-[max-height,opacity]
           duration-300 ease-in-out
           ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}
         `}
       >
-        <div className="overflow-hidden bg-blue-200/60">
-          <div className="border-t border-border/40 px-6 py-4 text-sm text-muted-foreground leading-relaxed">
-            {jawaban}
-          </div>
+        <div className="px-6 pb-5 pt-1 text-sm text-muted-foreground leading-relaxed border-t border-border/40">
+          {jawaban}
         </div>
       </div>
     </div>

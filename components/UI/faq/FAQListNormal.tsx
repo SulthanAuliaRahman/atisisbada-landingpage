@@ -9,15 +9,13 @@ export type FAQ = {
   jawaban: string;
 };
 
-export default function FAQListNormal({
-  faqs,
-  openIds,
-  setOpenIds,
-}: {
-  faqs: FAQ[];
-  openIds: Set<string>;
-  setOpenIds: React.Dispatch<React.SetStateAction<Set<string>>>;
-}) {
+export default function FAQListNormal({faqs,openIds,setOpenIds,}: 
+  {
+    faqs: FAQ[];
+    openIds: Set<string>;
+    setOpenIds: React.Dispatch<React.SetStateAction<Set<string>>>;
+  }) {
+    
   const toggle = (id: string) => {
     setOpenIds(prev => {
       const next = new Set(prev);

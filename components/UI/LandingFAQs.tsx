@@ -3,8 +3,9 @@
 import { useState } from "react";
 import FAQListNormal from "@/components/UI/faq/FAQListNormal";
 import FAQListSlider from "@/components/UI/faq/FAQListSlider";
-import BeritaList from "@/components/BeritaList";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import BeritaListNormal from "@/components/UI/berita/BeritaListNormal";
+import BeritaListSlider from "@/components/UI/berita/BeritaListSlider";
+import { ArrowRight } from "lucide-react";
 
 type Faq = {
   id: string;
@@ -23,99 +24,161 @@ type Props = {
   berita: Berita[];
 };
 
+type ActiveSection = "faq" | "berita" | "none";
+
 const INITIAL_COUNT = 4;
 
 export default function LandingFaqs({ faqs, berita }: Props) {
+  // FAQ states
   const [openIds, setOpenIds] = useState<Set<string>>(new Set());
-  const [expanded, setExpanded] = useState(false);
-  const [sliderActive, setSliderActive] = useState(false);
+  const [faqExpanded, setFaqExpanded] = useState(false);
+  const [faqSliderReady, setFaqSliderReady] = useState(false);
 
-  const hasMore = faqs.length > INITIAL_COUNT;
+  // Berita states
+  const [beritaExpanded, setBeritaExpanded] = useState(false);
+  const [beritaSliderReady, setBeritaSliderReady] = useState(false);
 
-  const expand = () => {
-    setExpanded(true);
-    setTimeout(() => setSliderActive(true), 100);
+  const [activeSection, setActiveSection] = useState<ActiveSection>("none");
+
+  const hasMoreFaq = faqs.length > INITIAL_COUNT;
+  const hasMoreBerita = berita.length > INITIAL_COUNT;
+
+
+  //faq handler
+  const expandFaq = () => {
+    setActiveSection("faq");
+    setFaqExpanded(true);
+    setTimeout(() => {
+      setFaqSliderReady(true);
+    }, 100);
   };
 
-  const collapse = () => {
-    setSliderActive(false);
-    setTimeout(() => setExpanded(false), 100);
+  const collapseFaq = () => {
+    setFaqSliderReady(false);
+    setTimeout(() => {
+      setFaqExpanded(false);
+      setActiveSection("none");
+    }, 100); 
+  };
+
+  // Berita Handlers
+  const expandBerita = () => {
+    setActiveSection("berita");
+    setBeritaExpanded(true);
+    setTimeout(() => {
+      setBeritaSliderReady(true);
+    }, 100);
+  };
+
+  const collapseBerita = () => {
+    setBeritaSliderReady(false);
+    setTimeout(() => {
+      setBeritaExpanded(false);
+      setActiveSection("none");
+    }, 100);
   };
 
   return (
-    <section
-      className={`py-10 bg-background`}
-      id="FAQ"
-    >
+    <section className="py-10 bg-background" id="FAQ">
       <div className="container mx-auto px-4">
         <div
           className={`
-    grid gap-12 transition-[grid-template-columns]
-    duration-700 ease-[cubic-bezier(.22,.61,.36,1)]
-    ${sliderActive ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2"}
-  `}
+            grid gap-10 lg:gap-12
+            transition-[grid-template-columns] duration-700 ease-[cubic-bezier(0.22,0.61,0.36,1)]
+            ${activeSection !== "none" ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2"}
+          `}
         >
-          {/* FAQ */}
-          <div className="relative">
-            <SectionHeader title="FAQs" />
+          {/* FAQ COLUMN */}
+          {activeSection !== "berita" && (
             <div className="relative">
-              {/* Normal */}
+              <SectionHeader title="FAQs" />
+
               <div
                 className={`
-          transition-all duration-300 ease-in-out
-          ${
-            sliderActive
-              ? "opacity-0 h-0 overflow-hidden pointer-events-none"
-              : "opacity-100 h-auto"
-          }
-        `}
+                  transition-all duration-500 ease-in-out
+                  ${faqExpanded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none absolute inset-0"}
+                `}
               >
-                <FAQListNormal
-                  faqs={faqs.slice(0, INITIAL_COUNT)}
-                  openIds={openIds}
-                  setOpenIds={setOpenIds}
-                />
+                {faqExpanded && faqSliderReady && (
+                  <FAQListSlider
+                    faqs={faqs}
+                    openIds={openIds}
+                    setOpenIds={setOpenIds}
+                    isExpanded={faqExpanded}
+                    onCollapse={collapseFaq}
+                  />
+                )}
               </div>
 
-              {/* Slider */}
               <div
                 className={`
-          transition-all duration-300 ease-in-out
-          ${
-            sliderActive
-              ? "opacity-100 h-auto"
-              : "opacity-0 h-0 overflow-hidden pointer-events-none"
-          }
-        `}
+                  transition-all duration-500 ease-in-out
+                  ${!faqExpanded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[-8px] pointer-events-none absolute inset-0"}
+                `}
               >
-                <FAQListSlider
-                  faqs={faqs}
-                  openIds={openIds}
-                  setOpenIds={setOpenIds}
-                  isExpanded={expanded}
-                  onCollapse={collapse}
-                />
+                {!faqExpanded && (
+                  <FAQListNormal
+                    faqs={faqs.slice(0, INITIAL_COUNT)}
+                    openIds={openIds}
+                    setOpenIds={setOpenIds}
+                  />
+                )}
               </div>
 
-              {/* Controls – only show "Baca selengkapnya" when not expanded */}
-              <div className="relative z-20 mt-6 flex justify-start">
-                {!expanded && hasMore && (
+              <div className="mt-6 flex justify-start">
+                {!faqExpanded && hasMoreFaq && (
                   <button
-                    onClick={expand}
-                    className="inline-flex items-center gap-2 text-primary text-sm font-medium"
+                    onClick={expandFaq}
+                    className="inline-flex items-center gap-2 text-primary text-sm font-medium hover:underline transition"
                   >
-                    Baca selengkapnya <ArrowRight />
+                    Baca selengkapnya <ArrowRight size={16} />
                   </button>
                 )}
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Publikasi – hide when sliderActive instead of expanded */}
-          {!sliderActive && (
-            <div>
-              <SectionHeader title="Publikasi" />
-              <BeritaList berita={berita} />
+          {/* BERITA COLUMN */}
+          {activeSection !== "faq" && (
+            <div className="relative">
+              <SectionHeader title="Berita" />
+
+              <div
+                className={`
+                  transition-all duration-500 ease-in-out
+                  ${beritaExpanded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none absolute inset-0"}
+                `}
+              >
+                {beritaExpanded && beritaSliderReady && (
+                  <BeritaListSlider
+                    berita={berita}
+                    isExpanded={beritaExpanded}
+                    onCollapse={collapseBerita}
+                  />
+                )}
+              </div>
+
+              <div
+                className={`
+                  transition-all duration-500 ease-in-out
+                  ${!beritaExpanded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[-8px] pointer-events-none absolute inset-0"}
+                `}
+              >
+                {!beritaExpanded && (
+                  <BeritaListNormal Berita={berita.slice(0, INITIAL_COUNT)} />
+                )}
+              </div>
+
+              {!beritaExpanded && hasMoreBerita && (
+                <div className="mt-6 flex justify-start">
+                  <button
+                    onClick={expandBerita}
+                    className="inline-flex items-center gap-2 text-primary text-sm font-medium hover:underline transition"
+                  >
+                    Baca Selengkapnya <ArrowRight size={16} />
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -124,7 +187,6 @@ export default function LandingFaqs({ faqs, berita }: Props) {
   );
 }
 
-//helper
 function SectionHeader({ title }: { title: string }) {
   return (
     <div className="mb-8">

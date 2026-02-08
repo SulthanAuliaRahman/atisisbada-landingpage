@@ -1,52 +1,30 @@
-// components/UI/faq/FAQListSlider.tsx
+// components/UI/berita/BeritaListSlider.tsx
 "use client";
 
 import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import FAQItem from "@/components/FAQItem";
+import BeritaItem from "@/components/BeritaItem";
 
-export type FAQ = {
+type Berita = {
   id: string;
-  pertanyaan: string;
-  jawaban: string;
+  nama: string;
+  url: string;
 };
 
-type FAQListSliderProps = {
-  faqs: FAQ[];
-  openIds?: Set<string>;
-  setOpenIds?: React.Dispatch<React.SetStateAction<Set<string>>>;
+type Props = {
+  berita: Berita[];
   isExpanded?: boolean;
   onCollapse?: () => void;
 };
 
 const ITEMS_PER_PAGE = 8;
 
-export default function FAQListSlider({
-  faqs,
-  openIds: externalOpenIds,
-  setOpenIds: externalSetOpenIds,
-  isExpanded = false,
-  onCollapse,
-}: FAQListSliderProps) {
-  const [internalOpenIds, setInternalOpenIds] = useState<Set<string>>(
-    new Set(),
-  );
+export default function BeritaListSlider({berita,isExpanded = false,onCollapse,}: Props) {
   const [pageIndex, setPageIndex] = useState(0);
 
-  const openIds = externalOpenIds ?? internalOpenIds;
-  const setOpenIds = externalSetOpenIds ?? setInternalOpenIds;
-
-  const pages = chunk(faqs, ITEMS_PER_PAGE);
+  const pages = chunk(berita, ITEMS_PER_PAGE);
   const maxIndex = pages.length - 1;
   const hasMultiplePages = pages.length > 1;
-
-  const toggle = (id: string) => {
-    setOpenIds((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  };
 
   return (
     <div className="space-y-8 md:space-y-10">
@@ -63,42 +41,39 @@ export default function FAQListSlider({
             >
               {/* Left column */}
               <div className="flex flex-col min-h-0">
-                <div className="space-y-4 flex-1">
-                  {page.slice(0, 4).map((faq) => (
-                    <FAQItem
-                      key={faq.id}
-                      {...faq}
-                      isOpen={openIds.has(faq.id)}
-                      onToggle={() => toggle(faq.id)}
+                  <div className="space-y-4 flex-1">
+                  {page.slice(0, 4).map((berita) => (
+                    <BeritaItem
+                      key={berita.id}
+                      title={berita.nama}
+                      url={berita.url}
                     />
                   ))}
                 </div>
               </div>
 
-              {/* Right column */}
+              {/* right column */}
               <div className="flex flex-col min-h-0">
-                <div className="space-y-4 flex-1">
-                  {page.slice(4, 8).map((faq) => (
-                    <FAQItem
-                      key={faq.id}
-                      {...faq}
-                      isOpen={openIds.has(faq.id)}
-                      onToggle={() => toggle(faq.id)}
+                  <div className="space-y-4 flex-1">
+                  {page.slice(4, 8).map((berita) => (
+                    <BeritaItem
+                      key={berita.id}
+                      title={berita.nama}
+                      url={berita.url}
                     />
                   ))}
+                  </div>
                 </div>
-              </div>
             </div>
           ))}
         </div>
       </div>
-
       {/* Navigation + Back button */}
       <div className="flex flex-col items-center gap-6">
         {/* Pagination arrows */}
         {hasMultiplePages && (
           <div className="flex items-center justify-center gap-6">
-            <button
+           <button
               onClick={() => setPageIndex((i) => Math.max(i - 1, 0))}
               disabled={pageIndex === 0}
               className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/80 text-primary shadow-sm transition-all hover:bg-primary/10 disabled:opacity-40 disabled:cursor-not-allowed"

@@ -26,7 +26,7 @@ export default async function LandingFAQsWrapper() {
  async function getBerita() {
   return prisma.berita.findMany({
     where:{status: true},
-    orderBy: { created_at: "desc" },
+    orderBy: { created_at: "asc" },
     select: {
       id: true,
       nama: true,

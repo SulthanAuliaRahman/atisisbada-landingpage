@@ -7,8 +7,11 @@ interface Props {
 }
 
 const BeritaItem: React.FC<Props> = ({ title, url }) => {
-  return (
-    <a
+  return (<>
+  
+  
+    <div>
+      <a
       href={url}
       target="_blank"
       rel="noopener noreferrer"
@@ -17,7 +20,7 @@ const BeritaItem: React.FC<Props> = ({ title, url }) => {
         px-6 py-4 transition hover:border-primary hover:bg-muted
       "
     >
-      <div className="flex items-center justify-between">
+      <div className="flex justify-between">
         <span className="text-base font-medium text-foreground">
           {title}
         </span>
@@ -25,6 +28,9 @@ const BeritaItem: React.FC<Props> = ({ title, url }) => {
         <span className="text-primary text-sm"><ArrowRight/></span>
       </div>
     </a>
+    </div>
+    
+    </>
   );
 };
 
