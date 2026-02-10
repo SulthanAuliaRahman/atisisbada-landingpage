@@ -50,6 +50,11 @@ const LandingFooter = () => {
       <div className="mx-auto max-w-[1600px] w-full">
         <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-[1fr_auto]">
           <div className="bg-[#285d8e] row-span-2 flex flex-col px-10 py-14 gap-4">
+              <span className="text-white text-sm"><b>Dikembangkan Oleh</b></span>
+            <div className="flex gap-2">
+              <span className="w-12 h-1 bg-background rounded-full" />
+              <span className="w-6 h-1 bg-item-bg rounded-full opacity-50" />
+            </div>
             <LogoPreview src="/logo.png" />
             <div className="flex items-center gap-3">
               <img src="/Location.png" className="h-5 w-5" alt="Location" />
