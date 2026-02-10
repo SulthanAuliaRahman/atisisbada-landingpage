@@ -4,7 +4,7 @@ import InstagramSection from "@/components/server/InstagramSection.server";
 
 export default function Page() {
   return (
-    <div>
+    <div className="bg-backgrounnd overflow-x-hidden">
       <ItemPage type="MODUL" />
       <InstagramSection/>
       <LandingFAQsWrapper/>

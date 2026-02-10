@@ -2,7 +2,7 @@ import React from 'react'
 
 const profilPage = () => {
   return (
-    <div>
+    <div className="bg-backgrounnd overflow-x-hidden">
       profilPage
     </div>
     

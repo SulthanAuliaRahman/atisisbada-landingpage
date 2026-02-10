@@ -4,7 +4,7 @@ import LandingFAQsWrapper from "@/components/server/LandingFAQs.server";
 
 export default function Page() {
   return (
-    <div>
+    <div className="bg-backgrounnd overflow-x-hidden">
       <ItemPage type="FITUR" />
       <InstagramSection/>
       <LandingFAQsWrapper/>
