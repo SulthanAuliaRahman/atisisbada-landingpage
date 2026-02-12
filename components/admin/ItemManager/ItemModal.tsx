@@ -91,16 +91,102 @@ export default function ItemModal({
     if (!quillReady) return;
     if (!(window as any).Quill) return;
 
+    const Quill = (window as any).Quill;
+
+    if ((window as any).ImageResize && !Quill.imports["modules/imageResize"]) {
+      Quill.register("modules/imageResize", (window as any).ImageResize);
+    }
+
+    const BaseVideo = Quill.import("formats/video");
+
+    class CustomVideo extends BaseVideo {
+      static create(value: string) {
+        const iframe = super.create(value) as HTMLElement;
+
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("ql-video-wrapper");
+        wrapper.setAttribute("contenteditable", "false");
+
+        wrapper.style.position = "relative";
+        wrapper.style.display = "inline-block";
+        wrapper.style.width = "560px";
+        wrapper.style.margin = "10px 0";
+
+        iframe.style.width = "100%";
+        iframe.style.height = "315px";
+        iframe.style.display = "block";
+        iframe.style.pointerEvents = "none";
+
+        wrapper.appendChild(iframe);
+
+        const handle = document.createElement("div");
+        handle.style.position = "absolute";
+        handle.style.right = "-6px";
+        handle.style.bottom = "-6px";
+        handle.style.width = "14px";
+        handle.style.height = "14px";
+        handle.style.background = "#2563eb";
+        handle.style.borderRadius = "50%";
+        handle.style.cursor = "nwse-resize";
+        handle.style.zIndex = "10";
+
+        wrapper.appendChild(handle);
+
+        let isResizing = false;
+        let startX = 0;
+        let startWidth = 0;
+
+        const onMouseMove = (e: MouseEvent) => {
+          if (!isResizing) return;
+
+          const diff = e.clientX - startX;
+          const newWidth = Math.max(240, Math.min(1200, startWidth + diff));
+          const newHeight = (newWidth * 9) / 16;
+
+          wrapper.style.width = newWidth + "px";
+          iframe.style.height = newHeight + "px";
+
+          wrapper.setAttribute("data-width", newWidth.toString());
+        };
+
+        const onMouseUp = () => {
+          isResizing = false;
+          document.body.style.cursor = "";
+          document.removeEventListener("mousemove", onMouseMove);
+          document.removeEventListener("mouseup", onMouseUp);
+        };
+
+        handle.addEventListener("mousedown", (e: MouseEvent) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          isResizing = true;
+          startX = e.clientX;
+          startWidth = wrapper.offsetWidth;
+
+          document.body.style.cursor = "nwse-resize";
+
+          document.addEventListener("mousemove", onMouseMove);
+          document.addEventListener("mouseup", onMouseUp);
+        });
+
+        return wrapper;
+      }
+
+      static value(node: HTMLElement) {
+        const iframe = node.querySelector("iframe");
+        return iframe?.getAttribute("src") || "";
+      }
+    }
+
+    Quill.register("formats/video", CustomVideo, true);
+
     if (quillRef.current) {
       quillRef.current.off("text-change");
       const editorContainer = document.querySelector("#quill-editor");
-      if (editorContainer) {
-        editorContainer.innerHTML = "";
-      }
+      if (editorContainer) editorContainer.innerHTML = "";
       quillRef.current = null;
     }
-
-    const Quill = (window as any).Quill;
 
     const quill = new Quill("#quill-editor", {
       theme: "snow",
@@ -138,7 +224,6 @@ export default function ItemModal({
                 });
 
                 const { url } = await res.json();
-
                 const range = quill.getSelection();
                 if (!range) return;
 
@@ -149,6 +234,12 @@ export default function ItemModal({
             },
           },
         },
+
+        ...(Quill.imports["modules/imageResize"] && {
+          imageResize: {
+            modules: ["Resize", "DisplaySize", "Toolbar"],
+          },
+        }),
       },
     });
 
@@ -165,6 +256,11 @@ export default function ItemModal({
     <>
       <Script
         src="https://cdn.quilljs.com/1.3.7/quill.min.js"
+        strategy="afterInteractive"
+      />
+
+      <Script
+        src="https://unpkg.com/quill-image-resize-module@3.0.0/image-resize.min.js"
         strategy="afterInteractive"
         onLoad={() => setQuillReady(true)}
       />

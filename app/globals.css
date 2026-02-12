@@ -176,3 +176,37 @@
   );
   border-radius: 60px;
 }
+
+.ql-editor img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ql-editor .ql-video-wrapper {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.ql-editor .ql-video-wrapper iframe {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+
+.ql-video-resize-handle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  right: 0;
+  bottom: 0;
+  cursor: se-resize;
+  background: #2563eb;
+}
+.ql-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: white;
+}

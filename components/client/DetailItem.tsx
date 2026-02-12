@@ -109,7 +109,7 @@ const DetailItem = ({ id }: Props) => {
             alt={item.nama}
             className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 object-contain"
           />
-          <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 text-center">
+          <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl font-bold text-center">
             {item.nama}
           </h1>
         </div>
