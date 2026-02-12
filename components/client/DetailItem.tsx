@@ -1,16 +1,18 @@
 "use client";
+
 import { useEffect, useState, useRef } from "react";
 import { Item } from "@/lib/type/Item";
 import { useRouter } from "next/navigation";
 
-type Props = { id: string };
+type Props = {
+  id: string;
+};
 
 const DetailItem = ({ id }: Props) => {
   const [item, setItem] = useState<Item | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-
   const descRef = useRef<HTMLDivElement | null>(null);
   const [svgHeight, setSvgHeight] = useState(800);
 
@@ -29,12 +31,10 @@ const DetailItem = ({ id }: Props) => {
       try {
         setLoading(true);
         const res = await fetch(`/api/admin/item/${id}`);
-
         if (!res.ok) {
           setError("Failed to load item");
           return;
         }
-
         const json = await res.json();
         setItem(json.data);
       } catch (err) {
@@ -82,14 +82,14 @@ const DetailItem = ({ id }: Props) => {
           <clipPath id="trapeziumClip">
             <path
               d="
-            M 0,400
-            Q 0,200 200,200
-            L 800,200
-            Q 1000,200 1000,400
-            L 1000,1000
-            L 0,1000
-            Z
-          "
+                M 0,400
+                Q 0,200 200,200
+                L 800,200
+                Q 1000,200 1000,400
+                L 1000,1000
+                L 0,1000
+                Z
+              "
             />
           </clipPath>
         </defs>
@@ -102,7 +102,7 @@ const DetailItem = ({ id }: Props) => {
       </svg>
 
       <div className="w-full max-w-7xl relative z-10">
-        {/* Ikon dan Nama di atas lingkaran - dengan margin top lebih besar */}
+        {/* Ikon dan Nama */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 mt-4 sm:mt-8 md:mt-12 lg:mt-16">
           <img
             src={item.ikon}
@@ -113,14 +113,17 @@ const DetailItem = ({ id }: Props) => {
             {item.nama}
           </h1>
         </div>
+
         <div className="h-12 sm:h-16 md:h-20 lg:h-24"></div>
-        {/* Konten deskripsi - dengan padding top lebih besar untuk mobile */}
-        <div className="px-8 md:px-16 lg:px-24 pt-24 sm:pt-32 md:pt-16 pb-12 text-white">
+
+        {/* Deskripsi */}
+        <div className="px-8 md:px-16 lg:px-24 pt-24 sm:pt-32 md:pt-16 pb-12 text-white relative">
           <div
             ref={descRef}
             className="md:text-lg leading-relaxed prose prose-invert max-w-none"
             dangerouslySetInnerHTML={{ __html: item.deskripsi }}
           />
+
           <button
             onClick={() => router.back()}
             className="flex items-center gap-2 hover:opacity-80 transition-opacity absolute bottom-8 left-8 md:left-16 lg:left-24"
