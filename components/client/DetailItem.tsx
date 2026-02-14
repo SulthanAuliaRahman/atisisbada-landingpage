@@ -13,16 +13,6 @@ const DetailItem = ({ id }: Props) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const descRef = useRef<HTMLDivElement | null>(null);
-  const [svgHeight, setSvgHeight] = useState(800);
-
-  useEffect(() => {
-    if (!item) return;
-    if (!descRef.current) return;
-
-    const height = descRef.current.offsetHeight;
-    setSvgHeight(height + 300);
-  }, [item]);
 
   useEffect(() => {
     if (!id) return;
@@ -69,81 +59,106 @@ const DetailItem = ({ id }: Props) => {
       </div>
     );
 
+  const getDescriptionParts = (html: string) => {
+    if (!html) return { first: "", rest: "" };
+
+    const match = html.match(/<p.*?>.*?<\/p>/i);
+
+    if (!match) {
+      return { first: "", rest: html };
+    }
+
+    const first = match[0];
+    const rest = html.replace(first, "");
+
+    return { first, rest };
+  };
+
+  const { first, rest } = getDescriptionParts(item.deskripsi);
+
   return (
-    <div className="bg-card flex justify-center p-4 pt-12 relative overflow-hidden min-h-screen">
-      <svg
-        className="absolute top-0 left-0 w-full h-full pointer-events-none"
-        style={{ top: "100" }}
-        height={svgHeight}
-        viewBox="0 0 1000 1000"
-        preserveAspectRatio="none"
-      >
-        <defs>
-          <clipPath id="trapeziumClip">
-            <path
-              d="
-                M 0,400
-                Q 0,200 200,200
-                L 800,200
-                Q 1000,200 1000,400
-                L 1000,1000
-                L 0,1000
-                Z
-              "
-            />
-          </clipPath>
-        </defs>
-        <rect
-          width="1000"
-          height="1000"
-          fill="#3B82F6"
-          clipPath="url(#trapeziumClip)"
-        />
-      </svg>
+    <div className="w-full">
+      {/* ===== SECTION ATAS ===== */}
+      <section className="relative min-h-[420px] px-6 pt-40 sm:pt-44 lg:pt-48 pb-16 sm:pb-20 bg-item-bg overflow-hidden text-white flex flex-col items-center justify-center">
+        <div className="pointer-events-none absolute -top-32 -right-32 w-72 h-72 bg-white/30 rounded-full blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-32 -left-32 w-72 h-72 bg-white/25 rounded-full blur-3xl" />
 
-      <div className="w-full max-w-7xl relative z-10">
-        {/* Ikon dan Nama */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 mt-4 sm:mt-8 md:mt-12 lg:mt-16">
-          <img
-            src={item.ikon}
-            alt={item.nama}
-            className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 object-contain"
-          />
-          <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl font-bold text-center">
-            {item.nama}
-          </h1>
-        </div>
-
-        <div className="h-12 sm:h-16 md:h-20 lg:h-24"></div>
-
-        {/* Deskripsi */}
-        <div className="px-8 md:px-16 lg:px-24 pt-24 sm:pt-32 md:pt-16 pb-12 text-white relative">
+        {/* HALF CIRCLE */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
           <div
-            ref={descRef}
-            className="md:text-lg leading-relaxed prose prose-invert max-w-none"
-            dangerouslySetInnerHTML={{ __html: item.deskripsi }}
-          />
-
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity absolute bottom-8 left-8 md:left-16 lg:left-24"
+            className="
+    relative 
+    w-40 h-28
+    sm:w-56 sm:h-40
+    md:w-72 md:h-56
+    lg:w-[560px] lg:h-[380px]
+    bg-white rounded-b-full
+    shadow-[0_12px_30px_rgba(0,0,0,0.25)]
+  "
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-white"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                clipRule="evenodd"
+            {/* Icon */}
+            <div className="absolute left-1/2 bottom-1/4 -translate-x-1/2 translate-y-1/2">
+              <img
+                src={item.ikon}
+                alt={item.nama}
+                className="
+            w-16 h-16
+            sm:w-20 sm:h-20
+            md:w-24 md:h-24
+            lg:w-28 lg:h-28
+            object-contain
+          "
               />
-            </svg>
-            <span className="text-white">Kembali</span>
-          </button>
+            </div>
+          </div>
         </div>
-      </div>
+
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center mt-15 z-10">
+          {item.type.charAt(0).toUpperCase() + item.type.slice(1).toLowerCase()}
+        </h1>
+
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center mt-2 z-10">
+          {item.nama
+            .toLowerCase()
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ")}
+        </h1>
+        <div className="flex items-center justify-center gap-3 mt-8 z-10">
+          <div className="h-[3px] w-3 bg-white" />
+          <div className="h-[3px] w-10 bg-white" />
+          <div className="h-[3px] w-3 bg-white" />
+        </div>
+        {first && (
+          <div className="mt-10 w-full flex justify-center">
+            <div className="w-full max-w-[900px] px-6 text-justify text-white/90">
+              <div
+                className="prose prose-invert max-w-none [&>*]:text-justify"
+                dangerouslySetInnerHTML={{ __html: first }}
+              />
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* ===== SECTION BAWAH ===== */}
+      <section className="w-full bg-white py-20">
+        <div className="w-full flex justify-center">
+          <div className="w-full max-w-[900px] px-6 text-justify">
+            <div
+              className="prose max-w-none [&_iframe]:w-full [&_iframe]:aspect-video"
+              dangerouslySetInnerHTML={{ __html: rest }}
+            />
+
+            <button
+              onClick={() => router.back()}
+              className="mt-10 text-blue-600 hover:opacity-80"
+            >
+              ← Kembali
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

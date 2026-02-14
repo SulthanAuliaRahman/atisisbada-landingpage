@@ -182,31 +182,74 @@
   height: auto;
 }
 
-.ql-editor .ql-video-wrapper {
-  position: relative;
-  display: inline-block;
+.prose iframe {
   max-width: 100%;
-}
-
-.ql-editor .ql-video-wrapper iframe {
   display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
-}
-
-.ql-video-resize-handle {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  right: 0;
-  bottom: 0;
-  cursor: se-resize;
-  background: #2563eb;
 }
 .ql-toolbar {
   position: sticky;
   top: 0;
   z-index: 20;
   background: white;
+}
+
+.ql-editor p.ql-align-left img {
+  float: left;
+  margin: 0 16px 16px 0;
+  width: 40%;
+  min-width: 180px;
+  max-width: 320px;
+}
+
+.ql-editor p.ql-align-right img {
+  float: right;
+  margin: 0 0 16px 16px;
+  width: 40%;
+  min-width: 180px;
+  max-width: 320px;
+}
+
+.ql-editor p.ql-align-center img {
+  display: block;
+  margin: 0 auto 16px auto;
+  width: 50%;
+  max-width: 400px;
+}
+
+.ql-editor p::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.prose p.ql-align-left img {
+  float: left;
+  margin: 0 16px 16px 0;
+  width: 40%;
+  min-width: 180px;
+  max-width: 320px;
+}
+
+.prose p.ql-align-right img {
+  float: right;
+  margin: 0 0 16px 16px;
+  width: 40%;
+  min-width: 180px;
+  max-width: 320px;
+}
+
+.prose p.ql-align-center img {
+  display: block;
+  margin: 0 auto 16px auto;
+  width: 50%;
+  max-width: 400px;
+}
+
+.prose p::after {
+  content: "";
+  display: block;
+  clear: both;
 }
