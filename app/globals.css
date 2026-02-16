@@ -253,3 +253,43 @@
   display: block;
   clear: both;
 }
+.prose .ql-align-center {
+  text-align: center;
+}
+
+.prose .ql-align-right {
+  text-align: right;
+}
+
+.prose .ql-align-left {
+  text-align: left;
+}
+
+.prose {
+  font-size: clamp(1rem, 1vw + 0.8rem, 1.125rem);
+  line-height: 1.6;
+}
+
+.prose h1 {
+  font-size: clamp(1.75rem, 2vw + 1rem, 2.5rem);
+}
+
+.prose h2 {
+  font-size: clamp(1.375rem, 1.5vw + 1rem, 1.875rem);
+}
+
+.prose h3 {
+  font-size: clamp(1.125rem, 1vw + 0.9rem, 1.5rem);
+}
+
+.prose h4 {
+  font-size: clamp(1rem, 0.8vw + 0.9rem, 1.25rem);
+}
+
+.prose h5 {
+  font-size: clamp(0.875rem, 0.5vw + 0.8rem, 1.125rem);
+}
+
+.prose h6 {
+  font-size: clamp(0.75rem, 0.4vw + 0.7rem, 1rem);
+}
