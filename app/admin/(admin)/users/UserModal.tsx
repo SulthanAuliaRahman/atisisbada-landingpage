@@ -4,7 +4,12 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { updateUser } from "./actions";
 import { signUp } from "@/lib/auth-client";
+import { User } from "@/lib/type/User";
 
+type Props = {
+  triggerLabel: string;
+  initialData?: User;
+};
 const UserModal = ({ triggerLabel, initialData }: Props) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);

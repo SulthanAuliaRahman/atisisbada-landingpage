@@ -8,6 +8,7 @@ import {
   getSortedRowModel,
   getFilteredRowModel,
   useReactTable,
+  SortingState,
 } from "@tanstack/react-table";
 
 import { useState } from "react";
@@ -22,7 +23,7 @@ type Props = {
 
 const UserTable = ({ users }: Props) => {
   const router = useRouter();
-  const [sorting, setSorting] = useState([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
 
   const columns: ColumnDef<User>[] = [
