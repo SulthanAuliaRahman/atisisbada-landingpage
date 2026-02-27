@@ -17,18 +17,28 @@ const UserModal = ({ triggerLabel, initialData }: Props) => {
 
   async function handleSubmit(formData: FormData) {
     startTransition(async () => {
-      if (initialData?.id) {
-        await updateUser(formData);
-      } else {
-        await signUp.email({
-          name: formData.get("name") as string,
-          email: formData.get("email") as string,
-          password: formData.get("password") as string,
-        });
-      }
+      try {
+        if (initialData?.id) {
+          await updateUser(formData);
+        } else {
+          const res = await signUp.email({
+            name: formData.get("name") as string,
+            email: formData.get("email") as string,
+            password: formData.get("password") as string,
+          });
 
-      setOpen(false);
-      router.refresh();
+          if (res?.error) {
+            alert(res.error.message || "Gagal menambahkan user");
+            return;
+          }
+        }
+
+        setOpen(false);
+        router.refresh();
+      } catch (err) {
+        console.error(err);
+        alert("Terjadi kesalahan");
+      }
     });
   }
 
