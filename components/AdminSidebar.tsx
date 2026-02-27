@@ -13,7 +13,7 @@ export const adminNavItems = [
   { name: "Berita",     href: "/admin/berita",      icon: Settings },
   { name: "Carousel",   href: "/admin/profil",      icon: Settings },
   { name: "Instagram",   href: "/admin/instagram",      icon: Settings },
-  { name: "pengaturan", href: "/admin/pengaturan",  icon: Users },
+  { name: "User", href: "/admin/users",  icon: Users },
   { name: "Footer",     href: "/admin/footer",      icon: Settings },
 ];
 
