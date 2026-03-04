@@ -5,7 +5,7 @@ import CarouselForm from "./CarouselForm";
 
 export type CarouselPayload = {
   id?: string;
-  alt?: string; // this for the name
+  alt?: string;
   nomor_urut?: number;
   status?: boolean;
 };

@@ -6,30 +6,32 @@ import crypto from "crypto";
 
 const STORAGE_DIR =
   process.env.NODE_ENV === "development"
-    ? path.join(process.cwd(), "public", "carousel")
-    : "/var/www/storage/carousel";
+    ? path.join(process.cwd(), "public", "perkembangan")
+    : "/var/www/storage/perkembangan";
 
 const PUBLIC_URL_PREFIX =
   process.env.NODE_ENV === "development"
-    ? "/carousel" : "https://dev-atis-landingpage.atisisbada.id/carousel";
+    ? "/perkembangan"
+    : "https://dev-atis-landingpage.atisisbada.id/perkembangan";
 
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
 
     const file = formData.get("image") as File | null;
-    const nama = formData.get("nama") as string | null;
+    const judul = formData.get("judul") as string | null;
+    const text = formData.get("text") as string | null;
 
     if (!file || !file.type.startsWith("image/")) {
       return NextResponse.json(
-        { message: "Image required" },
+        { message: "Gambar background wajib diunggah" },
         { status: 400 }
       );
     }
 
-    if (!nama) {
+    if (!judul || !text) {
       return NextResponse.json(
-        { message: "nama required" },
+        { message: "Judul dan teks wajib diisi" },
         { status: 400 }
       );
     }
@@ -45,18 +47,19 @@ export async function POST(request: Request) {
     const buffer = Buffer.from(await file.arrayBuffer());
     fs.writeFileSync(filepath, buffer);
 
-    const slide = await prisma.homeCarousel.create({
+    const data = await prisma.perkembangan.create({
       data: {
-        nomor_urut: Number(formData.get("nomor_urut")) || null,
-        url: `${PUBLIC_URL_PREFIX}/${filename}`,
-        alt: nama,
+        judul,
+        text,
+        tahun: Number(formData.get("tahun")) || null,
+        background_url: `${PUBLIC_URL_PREFIX}/${filename}`,
         status: formData.get("status") !== "false",
       },
     });
 
-    return NextResponse.json(slide, { status: 201 });
+    return NextResponse.json(data, { status: 201 });
   } catch (error) {
-    console.error("POST /api/admin/profile error:", error);
+    console.error("POST /api/admin/perkembangan error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

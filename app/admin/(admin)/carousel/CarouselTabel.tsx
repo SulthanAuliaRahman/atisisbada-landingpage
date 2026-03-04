@@ -117,7 +117,7 @@ const CarouselTabel = ({ slides }: Props) => {
                       onClick={async () => {
                         if (!confirm("Hapus carousel ini?")) return;
                         console.log("in button")
-                        await fetch(`/api/admin/profile/${slide.id}`, {
+                        await fetch(`/api/admin/carousel/${slide.id}`, {
                           method: "DELETE",
                         });
                         window.location.reload();

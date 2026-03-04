@@ -11,10 +11,13 @@ export const adminNavItems = [
   { name: "Modul",      href: "/admin/modul",       icon: Package },
   { name: "Mitra",      href: "/admin/mitra",       icon: Users },
   { name: "Berita",     href: "/admin/berita",      icon: Settings },
-  { name: "Carousel",   href: "/admin/profil",      icon: Settings },
+  { name: "Carousel",   href: "/admin/carousel",      icon: Settings },
   { name: "Instagram",   href: "/admin/instagram",      icon: Settings },
   { name: "User", href: "/admin/users",  icon: Users },
   { name: "Footer",     href: "/admin/footer",      icon: Settings },
+  { name: "Pengembang",     href: "/admin/pengembang",      icon: Settings },
+  { name: "Perkembangan",     href: "/admin/perkembangan",      icon: Settings },
+  { name: "Profile",     href: "/admin/profile",      icon: Settings },
 ];
 
 export default function AdminSidebar() {

@@ -31,7 +31,7 @@ export default function CarouselForm({
     let response: Response;
 
     if (isEdit) {
-      response = await fetch(`/api/admin/profile/${initialData!.id}`, {
+      response = await fetch(`/api/admin/carousel/${initialData!.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -53,7 +53,7 @@ export default function CarouselForm({
       formData.append("nomor_urut", String(nomorUrut));
       formData.append("status", String(status));
 
-      response = await fetch("/api/admin/profile", {
+      response = await fetch("/api/admin/carousel", {
         method: "POST",
         body: formData,
       });

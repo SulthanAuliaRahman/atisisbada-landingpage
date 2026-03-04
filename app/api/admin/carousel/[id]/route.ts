@@ -40,7 +40,7 @@ export async function PUT(
 
     return NextResponse.json(slide);
   } catch (error) {
-    console.error("PUT /api/admin/profile/[id] error:", error);
+    console.error("PUT /api/admin/carousel/[id] error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
@@ -77,7 +77,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: "Deleted" });
   } catch (error) {
-    console.error("DELETE /api/admin/profile/[id] error:", error);
+    console.error("DELETE /api/admin/carousel/[id] error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
