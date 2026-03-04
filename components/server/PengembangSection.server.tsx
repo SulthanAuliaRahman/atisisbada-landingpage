@@ -9,6 +9,10 @@ export const revalidate = 30;
 
 export default async function PengembangSectionWrapper() {
     const data = await getPengembang();
+    
+    if (!data || data.length === 0) {
+      return null;
+    }
 
   return <PengembangSectionUI developers={data} />;
 }

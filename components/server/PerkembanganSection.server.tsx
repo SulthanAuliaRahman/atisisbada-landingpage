@@ -16,6 +16,11 @@ const perkembanganPerusahaan = [
 export default async function PerkembanganSectionWrapper() {
     const data = await getPerkembanganPerusahaan();
 
+    if (!data || data.length === 0) {
+      // gak ada data jadi ke data default
+      return <PerkembanganPerusahaanSectionUI data={perkembanganPerusahaan} />;
+    }
+
   return <PerkembanganPerusahaanSectionUI data={data} />;
 }
 
