@@ -55,6 +55,15 @@ export default function PerkembanganForm({
           status,
         }),
       });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error("API Error:", response.status, data);
+        throw new Error(data?.message || "Unknown server error");
+      }
+
+
     } else {
       // POST → require image + fields
       if (!file || !judul || !text) {
@@ -74,6 +83,15 @@ export default function PerkembanganForm({
         method: "POST",
         body: formData,
       });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error("API Error:", response.status, data);
+        throw new Error(data?.message || "Unknown server error");
+      }
+
+      
     }
 
     setLoading(false);
