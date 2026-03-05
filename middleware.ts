@@ -11,9 +11,9 @@ export function middleware(request: NextRequest) {
 
     const token = request.cookies.get("token")?.value;
 
-    if (!token) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
+    // if (!token) {
+    //   return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    // }
 
     return NextResponse.next();
   }

@@ -1,8 +1,6 @@
-"Use client"
-
+"use client"
 import React from "react";
-import Image from "next/image";
-
+import { LogoPreview } from "@/components/LogoPreview";
 interface Props{
   tentang_text: string;
 }
@@ -35,14 +33,7 @@ const TentangPerusahaanSectionUI = ({tentang_text}:Props) => {
 
         {/* Logo */}
         <div className="flex justify-center mb-8">
-          <Image
-            src="/logo.png"
-            alt="Company Logo"
-            width={640}
-            height={100}
-            className="object-contain"
-            priority
-          />
+          <LogoPreview src="/logo.png" />
 
           {/* <LogoPreview src="/logo.png" /> */}
         </div>

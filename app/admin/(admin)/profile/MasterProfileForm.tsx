@@ -32,9 +32,10 @@ export default function MasterProfileForm({ initialData }: Props) {
     try {
       setLoading(true);
 
-      const res = await fetch(`/api/admin/profil`, {
+      const res = await fetch(`/api/admin/profile`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+         credentials: "include",
         body: JSON.stringify({
           Visi: visi,
           Misi: misi,
@@ -43,19 +44,26 @@ export default function MasterProfileForm({ initialData }: Props) {
         }),
       });
 
-      if (!res.ok) throw new Error();
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error("API Error:", res.status, data);
+        throw new Error(data?.message || "Unknown server error");
+      }
+
+      console.log("Success:", data);
 
       router.refresh();
       alert("Data berhasil disimpan");
     } catch (error) {
-      alert("Terjadi kesalahan");
+      alert("Terjadi kesalahan" + error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow space-y-6">
+    <div className="bg-background p-6 rounded-lg shadow space-y-6">
 
       {/* PROFILE */}
       <div className="space-y-2">
