@@ -43,55 +43,39 @@ export default function PerkembanganForm({
 
     let response: Response;
 
+    const formData = new FormData();
+    formData.append("judul", judul);
+    formData.append("text", text);
+    formData.append("tahun", String(tahun));
+    formData.append("status", String(status));
+
+    if (file) {
+      formData.append("image", file);
+    }
+
     if (isEdit) {
-      // PUT → only text fields (image optional)
       response = await fetch(`/api/admin/perkembangan/${initialData!.id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          judul,
-          text,
-          tahun,
-          status,
-        }),
+        body: formData,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error("API Error:", response.status, data);
-        throw new Error(data?.message || "Unknown server error");
-      }
-
-
     } else {
-      // POST → require image + fields
       if (!file || !judul || !text) {
         alert("Background gambar, Judul, dan Text wajib diisi untuk data baru");
         setLoading(false);
         return;
       }
 
-      const formData = new FormData();
-      formData.append("image", file);
-      formData.append("judul", judul);
-      formData.append("text", text);
-      formData.append("tahun", String(tahun));
-      formData.append("status", String(status));
-
       response = await fetch("/api/admin/perkembangan", {
         method: "POST",
         body: formData,
       });
+    }
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (!response.ok) {
-        console.error("API Error:", response.status, data);
-        throw new Error(data?.message || "Unknown server error");
-      }
-
-      
+    if (!response.ok) {
+      console.error("API Error:", response.status, data);
+      throw new Error(data?.message || "Unknown server error");
     }
 
     setLoading(false);
