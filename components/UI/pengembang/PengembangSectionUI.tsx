@@ -1,6 +1,7 @@
 "use client";
 
 import PengembangCard from "@/components/PengembangCard";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 
 type Developer = {
@@ -74,14 +75,25 @@ export default function PengembangSectionUI({
 
         {/* LEFT BUTTON */}
         <button
-          onClick={() => scrollToSlide(Math.max(currentSlide - 1, 0))}
-          disabled={currentSlide === 0}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-20
-                     h-10 w-10 rounded-full shadow
-                     bg-background hover:bg-white disabled:opacity-50"
-        >
-          ‹
-        </button>
+            onClick={() => scrollToSlide(Math.max(currentSlide - 1, 0))}
+            disabled={currentSlide === 0}
+            aria-label="Previous developer"
+            className="
+              absolute left-0 top-1/2 -translate-y-1/2 z-20
+              flex h-11 w-11 items-center justify-center
+              rounded-full
+              border border-border
+              bg-background/80
+              text-primary
+              shadow-sm
+              transition-all
+              hover:bg-primary/10
+              disabled:opacity-40
+              disabled:cursor-not-allowed
+            "
+          >
+            <ArrowLeft size={20} />
+          </button>
 
         {/* RIGHT BUTTON */}
         <button
@@ -89,11 +101,22 @@ export default function PengembangSectionUI({
             scrollToSlide(Math.min(currentSlide + 1, totalSlides - 1))
           }
           disabled={currentSlide === totalSlides - 1}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-20
-                     h-10 w-10 rounded-full shadow
-                     bg-background hover:bg-white disabled:opacity-50"
+          aria-label="Next developer"
+          className="
+            absolute right-0 top-1/2 -translate-y-1/2 z-20
+            flex h-11 w-11 items-center justify-center
+            rounded-full
+            border border-border
+            bg-background/80
+            text-primary
+            shadow-sm
+            transition-all
+            hover:bg-primary/10
+            disabled:opacity-40
+            disabled:cursor-not-allowed
+          "
         >
-          ›
+          <ArrowRight size={20} />
         </button>
 
         {/* SLIDER */}
