@@ -21,7 +21,7 @@ const DesktopNav = ({ navItems, onCtaClick }: DesktopNavProps) => {
   return (
     <>
       {/* Logo */}
-      <Link href="/" className="flex items-center gap-2 font-bold text-xl">
+      <Link href="/" className="flex items-center font-bold text-l">
         <Image
           src="/logo-navbar.png"
           alt="Atisisbada Logo"
@@ -32,7 +32,7 @@ const DesktopNav = ({ navItems, onCtaClick }: DesktopNavProps) => {
       </Link>
 
       {/* Desktop Menu */}
-      <ul className="hidden md:flex items-center gap-24">
+      <ul className="hidden nav:flex items-center gap-12">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
 
@@ -41,7 +41,7 @@ const DesktopNav = ({ navItems, onCtaClick }: DesktopNavProps) => {
               <Link
                 href={item.href}
                 className={cn(
-                  "relative font-medium transition-colors",
+                  "relative font-medium transition-colors text-lg",
                   isActive
                     ? "text-primary"
                     : "text-foreground/80 hover:text-primary",
@@ -60,8 +60,8 @@ const DesktopNav = ({ navItems, onCtaClick }: DesktopNavProps) => {
       </ul>
 
       {/* Kontak Kami Button */}
-      <div className="hidden md:block">
-        <button className="regular-button" onClick={onCtaClick}>
+      <div className="hidden nav:block">
+        <button className="regular-button text-white px-12 py-2" onClick={onCtaClick}>
           Kontak Kami
         </button>
       </div>

@@ -6,10 +6,10 @@ import MobileNav from "./MobileNavbar";
 
 const navItems = [
   { name: "Home",     href: "/" },
+  { name: "Profil",   href: "/profil" },
   { name: "Fitur",    href: "/fitur" },
   { name: "Modul",    href: "/modul" },
   { name: "Mitra",    href: "/mitra" },
-  { name: "Profil",   href: "/profil" },
 ];
 
 const LandingNavbar = () => {
@@ -22,7 +22,6 @@ const LandingNavbar = () => {
   return (
     <nav className="sticky top-0 z-50 w-full bg-background py-5">
       <div className="container flex items-center justify-between">
-
         <DesktopNav
           navItems={navItems}
           onCtaClick={handleCtaClick}

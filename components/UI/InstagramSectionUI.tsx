@@ -62,6 +62,18 @@ export default function InstagramSectionUI({ posts }: InstagramSectionUIProps) {
       <Script src="//www.instagram.com/embed.js" strategy="afterInteractive" />
 
       <section className="py-16 md:py-24 bg-item-bg relative">
+
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-6 mb-8">
+          <h1 className="text-3xl md:text-4xl font-semibold">
+            Instagram
+          </h1>
+
+          <div className="mt-4 flex gap-2">
+            <span className="w-6 h-[3px] bg-[#045E92] rounded-full" />
+            <span className="w-6 h-[3px] bg-[#045E92] rounded-full" />
+            <span className="w-6 h-[3px] bg-[#045E92] rounded-full" />
+          </div>
+          </div>
         {" "}
       <div className="pointer-events-none absolute -top-32 -right-32 w-70 h-70 bg-white/30 rounded-full blur-3xl" />
       {" "}

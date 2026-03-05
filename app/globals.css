@@ -11,14 +11,16 @@
     --primary: 220 90% 56%; /* BLUE */
     --secondary: 200 85% 45%; /* cyan-blue accent */
 
+    --button-colour: 202 96% 42%;
+
     /* Interactive */
-    --button: var(--primary);
     --button-foreground: 210 40% 98%;
     --footer: #002947;
 
     --card: 210 40% 98%; /* white  Probably Changed back to  0 0% 100%; */
     --card-border: 220 13% 91%; /* light gray border */
     --item-bg: #0489d4;
+    --button: var(--button-colour);
   }
 
   .dark {
@@ -29,13 +31,14 @@
     --primary: 220 90% 65%; /* brighter blue */
     --secondary: 200 85% 60%;
 
-    --button: var(--primary);
     --button-foreground: 222 47% 6%;
     --footer: #002947;
 
     --card: 217 33% 12%; /* dark blue-gray */
     --card-border: 217 33% 17%; /* slightly lighter border */
     --item-bg: #002947;
+
+    --button: var(--primary);
   }
 
   body {
@@ -44,6 +47,8 @@
 }
 
 @theme {
+  --breakpoint-nav: 1024px;
+  
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
 

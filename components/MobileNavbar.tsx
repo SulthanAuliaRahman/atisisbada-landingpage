@@ -24,7 +24,7 @@ const MobileNav = ({
       {/* Mobile Toggle */}
       <button
         onClick={onToggle}
-        className="md:hidden p-2 text-foreground z-50"
+        className="nav:hidden p-2 text-foreground z-50"
         aria-label={isOpen ? "Close menu" : "Open menu"}
       >
         {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -33,7 +33,7 @@ const MobileNav = ({
       {/* Mobile Menu */}
       <div
         className={`fixed inset-0 z-40 flex flex-col items-center justify-center
-          bg-background/95 backdrop-blur transition-all duration-300 md:hidden
+          bg-background/95 backdrop-blur transition-all duration-300 nav:hidden
           ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
       >
         <div className="flex flex-col items-center gap-8 text-xl">
