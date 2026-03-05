@@ -12,11 +12,10 @@ const PengembangCard = ({ img_url, nama, jabatan }: PengembangCardProps) => {
       
       {/* Image */}
       <div className="relative w-full h-60">
-        <Image
+        <img
           src={img_url}
           alt={nama}
-          fill
-          className="object-cover"
+          className="object-cover w-full h-full"
         />
       </div>
 
