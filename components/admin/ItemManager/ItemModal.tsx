@@ -177,13 +177,15 @@ export default function ItemModal({
       <Script
         src="https://cdn.quilljs.com/1.3.7/quill.min.js"
         strategy="afterInteractive"
-      />
-
-      <Script
-        src="https://unpkg.com/quill-image-resize-module@3.0.0/image-resize.min.js"
-        strategy="afterInteractive"
         onLoad={() => setQuillReady(true)}
       />
+
+      {quillReady && (
+        <Script
+          src="https://unpkg.com/quill-image-resize-module@3.0.0/image-resize.min.js"
+          strategy="afterInteractive"
+        />
+      )}
       <link
         rel="stylesheet"
         href="https://cdn.quilljs.com/1.3.7/quill.snow.css"

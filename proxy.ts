@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/api/admin")) {
@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
-    const token = request.cookies.get("token")?.value;
+    const token = request.cookies.get("better-auth.session_token")?.value;
 
     // if (!token) {
     //   return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
