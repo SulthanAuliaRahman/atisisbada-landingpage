@@ -30,7 +30,7 @@ const FAQItem: React.FC<FAQItemProps> = ({
           text-left transition-colors
         "
       >
-        <span className="text-base font-medium text-foreground pr-4">
+        <span className="text-base font-bold text-foreground pr-4">
           {pertanyaan}
         </span>
 
@@ -42,6 +42,7 @@ const FAQItem: React.FC<FAQItemProps> = ({
             ${isOpen ? "rotate-180" : ""}
           `}
         >
+          {/*  Arrow Icon */}
           <svg
             className="w-5 h-5"
             fill="none"
@@ -57,12 +58,13 @@ const FAQItem: React.FC<FAQItemProps> = ({
       {/* Jawaban */}
       <div
         className={`
-          transition-[max-height,opacity]
+          transition-[max-height,opacity] 
           duration-300 ease-in-out
           ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}
         `}
       >
-        <div className="px-6 pb-5 pt-1 text-sm text-muted-foreground leading-relaxed border-t border-border/40">
+
+        <div className="bg-secondary shadow-2xl rounded-xl border-t border-border/60 px-6 py-2 pb-5 pt-4  text-sm text-muted-foreground text-white leading-relaxed border-t border-border/40">
           {jawaban}
         </div>
       </div>
