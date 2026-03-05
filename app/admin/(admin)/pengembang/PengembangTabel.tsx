@@ -79,7 +79,9 @@ const PengembangTabel = ({ data }: Props) => {
                           loading="lazy"
                           onError={(e) => {
                             e.currentTarget.src = "/images/placeholder-person.jpg"; 
+                            console.log(e);
                           }}
+                          
                         />
                       </div>
                     </td>

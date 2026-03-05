@@ -38,29 +38,27 @@ export default function PengembangForm({
 
     let response: Response;
 
+    const formData = new FormData();
+    formData.append("nama", nama);
+    formData.append("jabatan", jabatan);
+    formData.append("nomor_urut", String(nomorUrut));
+    formData.append("status", String(status));
+
+    if (file) {
+      formData.append("image", file);
+    }
+
     if (isEdit) {
       response = await fetch(`/api/admin/pengembang/${initialData!.id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nama,
-          jabatan,
-          nomor_urut: nomorUrut,
-          status,
-        }),
+        body: formData,
       });
     } else {
-      if (!file || !nama || !jabatan) {
-        alert("Foto, Nama, dan Jabatan wajib diisi untuk data baru");
+      if (!file) {
+        alert("Foto wajib diisi");
         setLoading(false);
         return;
       }
-      const formData = new FormData();
-      formData.append("image", file);
-      formData.append("nama", nama);
-      formData.append("jabatan", jabatan);
-      formData.append("nomor_urut", String(nomorUrut));
-      formData.append("status", String(status));
 
       response = await fetch("/api/admin/pengembang", {
         method: "POST",
@@ -69,6 +67,7 @@ export default function PengembangForm({
     }
 
     setLoading(false);
+
     if (response.ok) {
       onSuccess();
     } else {
