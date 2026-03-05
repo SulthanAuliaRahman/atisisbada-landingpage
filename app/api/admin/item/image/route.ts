@@ -4,8 +4,13 @@ import fs from "fs/promises";
 
 export async function POST(req: Request) {
   const formData = await req.formData();
-  const file = formData.get("file") as File | null;
 
+  const file =
+    (formData.get("file") as File) ||
+    (formData.get("file[]") as File) ||
+    (formData.get("files") as File) ||
+    (formData.get("files[]") as File);
+  console.log([...formData.entries()]);
   if (!file) {
     return NextResponse.json(
       { error: "File tidak ditemukan" },
@@ -31,7 +36,6 @@ export async function POST(req: Request) {
   const url = `/detail-item/${filename}`;
 
   return NextResponse.json({
-    success: true,
-    url,
+    data: [url],
   });
 }

@@ -14,7 +14,7 @@ const DetailFiturModul = ({ item, first }: Props) => {
       {/* HALF CIRCLE */}{" "}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
         {" "}
-        <div className="relative w-40 h-28 sm:w-56 sm:h-40 md:w-72 md:h-56 lg:w-[560px] lg:h-[380px] bg-white rounded-b-full shadow-[0_12px_30px_rgba(0,0,0,0.25)] ">
+        <div className="relative w-40 h-28 sm:w-56 sm:h-40 md:w-72 md:h-56 lg:w-[560px] lg:h-[380px] bg-[#045E92] rounded-b-full shadow-[0_12px_30px_rgba(0,0,0,0.25)] ">
           {" "}
           {/* Icon */}{" "}
           <div className="absolute left-1/2 bottom-1/4 -translate-x-1/2 translate-y-1/2">
