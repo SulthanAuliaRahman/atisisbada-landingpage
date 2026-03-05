@@ -6,6 +6,7 @@ import TopProfileSectionWrapper from '@/components/server/TopProfile.server';
 import TentangPerusahaanSectionWrapper from '@/components/server/TentangPerusahaanSection.server';
 import VisiMisiSectionWrapper from '@/components/server/VisiMisiSection.server';
 
+export const revalidate = 10;
 
 const profilPage = () => {
   return (
