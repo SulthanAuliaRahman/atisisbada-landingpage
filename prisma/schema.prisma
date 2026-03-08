@@ -138,7 +138,7 @@ model Berita {
 id String @id @default(uuid())
 nomor_urut Int?
 nama String @db.VarChar(255)
-deskripsi String @db.VarChar(255)
+deskripsi String @db.Text
 url String @db.VarChar(255)
 status Boolean @default(false)
 created_at DateTime?
@@ -166,7 +166,7 @@ model Instagram{
   id String @id @default(uuid())
   url String @db.VarChar(255)
   nama String @db.VarChar(255)
-  deskripsi String @db.VarChar(255)
+  deskripsi String @db.Text
   nomor_urut Int?
   status Boolean @default(false)
   created_at DateTime?
@@ -188,7 +188,7 @@ model Perkembangan{
   id String @id @default(uuid())
   tahun Int?
   judul String @db.VarChar(255)
-  text String @db.VarChar(255)
+  text String @db.Text
   background_url String @db.VarChar(255)
   status Boolean
   created_at DateTime?
