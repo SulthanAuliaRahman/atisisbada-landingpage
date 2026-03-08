@@ -15,10 +15,16 @@ type Item = {
   type: "FITUR" | "MODUL" | "MITRA";
 };
 
+type CardItem = {
+  id: string;
+  nama: string;
+};
+
 type LandingCard = {
   icon: IconName;
   header: string;
-  content: readonly string[];
+  type: "FITUR" | "MODUL" | "MITRA";
+  content: CardItem[];
 };
 
 const LandingModule = () => {
@@ -41,17 +47,20 @@ const LandingModule = () => {
         {
           icon: "setting",
           header: "Feature",
-          content: fitur.map((i) => i.nama),
+          type: "FITUR",
+          content: fitur.map((i) => ({ id: i.id, nama: i.nama })),
         },
         {
           icon: "boxes",
           header: "Modul",
-          content: modul.map((i) => i.nama),
+          type: "MODUL",
+          content: modul.map((i) => ({ id: i.id, nama: i.nama })),
         },
         {
           icon: "handshake",
           header: "Mitra",
-          content: mitra.map((i) => i.nama),
+          type: "MITRA",
+          content: mitra.map((i) => ({ id: i.id, nama: i.nama })),
         },
       ]);
     };
@@ -68,6 +77,7 @@ const LandingModule = () => {
               key={index}
               icon={card.icon}
               header={card.header}
+              type={card.type}
               content={card.content}
             />
           ))}

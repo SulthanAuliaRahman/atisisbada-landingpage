@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import {
   ChevronDown,
   Boxes,
@@ -19,27 +20,42 @@ const iconMap: Record<IconName, LucideIcon> = {
   handshake: Handshake,
 };
 
-
+type CardItem = {
+  id: string;
+  nama: string;
+};
 
 interface ModuleCardProps {
   icon: IconName;
   header: string;
-  content: readonly string[];
+  type: "FITUR" | "MODUL" | "MITRA";
+  content: CardItem[];
 }
 
 const ModuleCard: React.FC<ModuleCardProps> = ({
   icon,
   header,
+  type,
   content,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const Icon = iconMap[icon];
 
-  const visibleItems = isOpen ? content : content.slice(0, 4);
+  const routeMap = {
+    FITUR: "/fitur",
+    MODUL: "/modul",
+    MITRA: "/mitra",
+  };
+
+  const baseRoute = routeMap[type];
+  const unopenItemCount = 4; // config angka biar mudah di edit nya
+  const openedItemCount = 6; 
+
+  const visibleItems = isOpen ? content.slice(0, openedItemCount): content.slice(0, unopenItemCount);
 
   return (
     <div className="w-80 rounded-xl border border-card-border bg-card shadow-sm">
-      <button 
+      <button
         onClick={() => setIsOpen((prev) => !prev)}
         className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-3 px-5 py-4"
       >
@@ -63,14 +79,27 @@ const ModuleCard: React.FC<ModuleCardProps> = ({
         md:max-h-none md:opacity-100`}
       >
         <ul className="px-16 pb-4 space-y-2">
-          {visibleItems.map((item, index) => (
-            <li
-              key={index}
-              className="text-sm text-foreground/80"
-            >
-              {item}
+          {visibleItems.map((item) => (
+            <li key={item.id}>
+              <Link
+                href={`${baseRoute}/${item.id}`}
+                className="text-sm text-foreground/80 hover:text-primary transition"
+              >
+                {item.nama}
+              </Link>
             </li>
           ))}
+
+          {isOpen &&  (
+            <li>
+              <Link
+                href={baseRoute}
+                className="text-sm font-medium text-primary hover:underline"
+              >
+                lihat menu →
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
     </div>
