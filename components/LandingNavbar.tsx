@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DesktopNav from "./DesktopNavbar";
 import MobileNav from "./MobileNavbar";
 
@@ -14,14 +14,29 @@ const navItems = [
 
 const LandingNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [whatsapp, setWhatsapp] = useState("");
 
-  const handleCtaClick = () => {
-    console.log("Contanct button clicked");
+  useEffect(() => {
+    fetch("/api/admin/footer")
+      .then((res) => res.json())
+      .then((data) => {
+        setWhatsapp(data.whatsapp || "");
+      })
+      .catch(() => {});
+  }, []);
+
+   const handleCtaClick = () => {
+    if (!whatsapp) return;
+
+    const phone = whatsapp.replace(/\D/g, "");
+    const url = `https://wa.me/${phone}`;
+
+    window.open(url, "_blank");
   };
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-background py-5">
-      <div className="container flex items-center justify-between">
+      <div className="container max-w-[1700px] flex items-center justify-between">
         <DesktopNav
           navItems={navItems}
           onCtaClick={handleCtaClick}

@@ -38,7 +38,6 @@ export default function ThemeToggle() {
         "transition-all duration-300",
         "hover:scale-110 active:scale-95",
         "focus:outline-none focus:ring-2 focus:ring-primary/50",
-        "max-sm:hidden"
       )}
     >
       {isDarkMode ? (
